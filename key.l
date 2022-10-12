@@ -43,7 +43,7 @@ getSoundLevel    printf("SOUND_LEVEL_PF");
 \"    printf("DOUBLE_QUOTE");
 \(    printf("LP");
 \)    printf("RP");
-\n    printf(" NL\n"); // space added for organizational purposes
+\n    printf("\n"); // // space added for organizational purposes
 \+    printf("PLUS_OP");
 \-    printf("MINUS_OP");
 \/    printf("DIV_OP");
