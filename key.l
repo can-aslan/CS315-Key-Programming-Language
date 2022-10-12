@@ -3,7 +3,7 @@
 digit [0-9]
 letter [a-zA-Z]
 alphanumeric_or_symbol ({digit}|{letter}|_|$)
-all_chars [ |!|#-~]
+all_chars [ |!|#-~|\n|\t]
 str_stmt \"{all_chars}*\"
 integer {digit}+
 double_num {digit}*(\.){digit}+
