@@ -28,6 +28,7 @@ return    printf("RETURN");
 boolean    printf("BOOLEAN_TYPE");
 int    printf("INT_TYPE");
 string    printf("STRING_TYPE");
+char    printf("CHAR_TYPE");
 connection    printf("CONNECTION_TYPE");
 timestamp    printf("TIMESTAMP_TYPE");
 double    printf("DOUBLE_TYPE");
