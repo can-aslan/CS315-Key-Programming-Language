@@ -42,7 +42,7 @@ getAirQuality    return (AIR_QUALITY_PF);
 getLight    return (LIGHT_PF);
 getSoundLevel    return (SOUND_LEVEL_PF);
 send    return (SEND_PF);
-read    return (READ_PF)
+read    return (READ_PF);
 \"    return (DOUBLE_QUOTE);
 \(    return (LP);
 \)    return (RP);
