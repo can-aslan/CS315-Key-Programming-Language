@@ -1,5 +1,4 @@
 /* key.l */
-%option main
 digit [0-9]
 letter [a-zA-Z]
 alphanumeric_or_symbol ({digit}|{letter}|_|$)
