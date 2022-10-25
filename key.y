@@ -1,7 +1,4 @@
 /* key.y */
-%{
-#include <stdio.h>
-%}
 %union {
     #include <stdbool.h>
     double real;
@@ -24,13 +21,13 @@
 %token <string> STRING
 %token <string> IDENTIFIER
 %%
-test: STRING '\n' {printf("%s, string is typed", $1); {return 0;}}
+program: MAIN LP RP LBRACE STRING RBRACE NL    {printf("Input is valid!"); return 0;}
 
 %%
 #include "lex.yy.c"
 int lineno = 0;
 int yyerror(char *s) {
-    printf("%s is poo poo", s);
+    printf("%s is poo poo\n", s);
 }
 int main(void) {
     return yyparse();
