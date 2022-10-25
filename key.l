@@ -41,6 +41,8 @@ getAirPressure    printf("AIR_PRESSURE_PF");
 getAirQuality    printf("AIR_QUALITY_PF");
 getLight    printf("LIGHT_PF");
 getSoundLevel    printf("SOUND_LEVEL_PF");
+send    printf("SEND_PF");
+read    printf("READ_PF")
 \"    printf("DOUBLE_QUOTE");
 \(    printf("LP");
 \)    printf("RP");
