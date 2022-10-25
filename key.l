@@ -64,10 +64,24 @@ read    return (READ_PF)
 \/\/([^\n])*    return (SINGLE_LINE_COMMENT);
 \/\*([^(\/\*)]|\*+[^(\*\/)])*([\*])+\/    return (MULT_LINE_COMMENT);
 \;    return (SEMICOLON);
-{integer}    return (INTEGER);
-{str_stmt}    return (STRING);
-{double_num}    return (DOUBLE);
-switch\[{digit}\]    return (SWITCH_IDENTIFIER);
-{letter}{alphanumeric_or_symbol}*    return (IDENTIFIER);
+{integer}    {   sscanf(yytext, "%d", &yylval);
+                 return (INTEGER);
+             }
+
+{str_stmt}    {   sscanf(yytext, "%s", &yylval);
+                  return (STRING);
+              }
+
+{double_num}    {   sscanf(yytext, "%f", &yylval);
+                    return (DOUBLE);
+                }
+
+switch\[{digit}\]    {   sscanf(yytext[7], "%c", &yylval);
+                         return (SWITCH_IDENTIFIER);
+                     }
+
+{letter}{alphanumeric_or_symbol}*    {   sscanf(yytext, "%s", &yylval);
+                                         return (IDENTIFIER);
+                                     }
 %%
 int yywrap() { return 1; }
