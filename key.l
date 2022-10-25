@@ -46,7 +46,11 @@ read    return (READ_PF);
 \"    return (DOUBLE_QUOTE);
 \(    return (LP);
 \)    return (RP);
-\n    return (NL\n);
+\n    {
+        extern int lineno; 
+        lineno++;
+        return (NL);
+      }
 \+    return (PLUS_OP);
 \-    return (MINUS_OP);
 \/    return (DIV_OP);
