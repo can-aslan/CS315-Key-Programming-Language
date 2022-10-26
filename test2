@@ -1,0 +1,58 @@
+main()
+
+
+
+
+
+
+
+
+{
+    return;
+    return 4 + 3 + 2;
+    return "lolo" & "lala";
+    return 4 + var;
+    return var + 4;
+    return var + .9;
+    return 4 - var;
+    return var - 4;
+    return var - .9;
+    return "lolo" & var;
+    return var & "lele";
+    return "var" + "lele";
+    return var + "lele";
+
+    return var * va;
+    return var / va;
+    return var ** va;
+    return 3 * va;
+    return var / 5;
+    return 1.2 ** 3;
+    return 1.2 ** -3;
+    return 12 % 93;
+    return 18 / 2 * 4;
+    return 7 % 2 ** 4;
+
+    return (15 * 42) * 4 + 2 + 4 ** 1;
+
+    return foo();
+    return popo(kakis);
+
+    return getTimestamp();
+    return getTemperature();
+    return getHumidity();
+    return  getAirPressure();
+    return getAirQuality();
+    return  getLight();
+    return  getSoundLevel(2.5);
+    return  getSoundLevel(frequency);
+    return send(amo);
+    return establishConnection(amo);
+    return send(2);
+    return establishConnection("amo");
+}
+
+
+
+
+

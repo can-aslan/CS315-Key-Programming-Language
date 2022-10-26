@@ -4,6 +4,7 @@ letter [a-zA-Z]
 alphanumeric_or_symbol ({digit}|{letter}|_|$)
 all_chars [ |!|#-~|\n|\t]
 str_stmt \"{all_chars}*\"
+char_stmt \'{all_chars}\'
 integer {digit}+
 double_num {digit}*(\.){digit}+
 %%
@@ -67,6 +68,7 @@ void    return (VOID);
 \\    return (BACKSLASH);
 \,    return (COMMA);
 \.    return (DOT);
+\&    return (CONCAT_OP);
 \/\/([^\n])*    return (SINGLE_LINE_COMMENT);
 \/\*([^(\/\*)]|\*+[^(\*\/)])*([\*])+\/    return (MULT_LINE_COMMENT);
 \;    return (SEMICOLON);
@@ -77,12 +79,16 @@ void    return (VOID);
 {str_stmt}    {   sscanf(yytext, "%s", &yylval);
                   return (STRING);
               }
+              
+{char_stmt}    {   sscanf(yytext, "%c", &yylval);
+                  return (CHAR);
+              }
 
 {double_num}    {   sscanf(yytext, "%f", &yylval);
                     return (DOUBLE);
                 }
 
-switch\[{digit}\]    {   sscanf(yytext[7], "%c", &yylval);
+switch\[{digit}\]    {   sscanf(yytext, "%s", &yylval);
                          return (SWITCH_IDENTIFIER);
                      }
 
