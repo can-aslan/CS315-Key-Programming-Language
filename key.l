@@ -25,6 +25,8 @@ return    return (RETURN);
 \<\=    return (LESS_OR_EQUAL_OP);
 \=\=    return (EQUALITY_OP);
 \!\=    return (NOT_EQUALITY_OP);
+\=\=\=    return (STR_EQUALITY_OP);
+\!\=\=    return (STR_NOT_EQUALITY_OP);
 boolean    return (BOOLEAN_TYPE);
 int    return (INT_TYPE);
 string    return (STRING_TYPE);

@@ -19,8 +19,8 @@ main()
     return var - .9;
     return "lolo" & var;
     return var & "lele";
-    return "var" + "lele";
-    return var + "lele";
+   // return "var" + "lele";
+    //return var + "lele";
 
     return var * va;
     return var / va;
@@ -28,7 +28,7 @@ main()
     return 3 * va;
     return var / 5;
     return 1.2 ** 3;
-    return 1.2 ** -3;
+    //return 1.2 ** -3;
     return 12 % 93;
     return 18 / 2 * 4;
     return 7 % 2 ** 4;
@@ -46,10 +46,115 @@ main()
     return  getLight();
     return  getSoundLevel(2.5);
     return  getSoundLevel(frequency);
-    return send(amo);
+    //return send(amo);
     return establishConnection(amo);
-    return send(2);
+    //return send(2);
     return establishConnection("amo");
+    return aConnection.send(sendItem);
+    //return read();
+    return alo.read();
+    int abc = "";
+    kaka = "";
+    int popo = kaka;
+    
+    int popo = kaka & ""; 
+    int aaa = bb;
+    string aaa = "bb";
+    boolean isIshal = "false";
+    boolean isIshal = "false";
+    connection isIshal = "false";
+    timestamp isIshal = "false";
+    double d = "hello" & iAmDouble;
+    bencharim = 'c';
+    double kakapopus = 12.7;
+    int intigir = 5;
+    intigir = 10;
+    intigier = 45 * 2 / 6 % 6.4 ** 123;
+    
+    int kemal = (7**4) / 18 + 74 - 3;
+    //establishConnection("amo");//
+    //aConnection.send(sendItem);//
+    
+    //alo.read();//
+
+    int calisamq = heheha();
+    int calisamq = heheha(aa);
+    int calisamq = heheha(kes, sus);
+
+    boolean iskaka = false;
+    boolean iskaka = !true;
+    boolean iskaka = (true || true) && !false || !(!false || false) || true && false;
+    // boolean iskaka = !( isok || false); identifier yok 
+    boolean iskaka = !(!true || false);
+
+    boolean aBool =  2 < 8;
+    boolean aBool = 7 <= 8;
+    boolean aBool = 7 != 8;
+    boolean aBool = (112 * 8 / 3) == 8;
+    boolean aBool = (112 * 8 / 3) >= 8;
+    boolean aBool = (112 * 8 / 3) > 8;
+
+    // int switchTest = switch[5];
+    // int switchTest = switch[15];
+    // int switchTest = switch[0];
+
+    string calismq = "calis" === isok;
+    string calimq = isok === "calis0";
+    string calismq = "calis" !== "isok";
+
+    while (true) {
+        string calismq = "calis" === isok;
+        string calimq = isok === "calis0";
+        string calismq = "calis" !== "isok";
+        string calismq = abc == hfkjsd;
+    }
+    
+    while ( 3 <= 7)
+    {
+        boolean isishal_with_misir_parcaciklari = cankakismi && false;
+        boolean isishal_with_domates_parcaciklari = cankakismi && false || 4 + 7 && true;
+        
+    }
+
+    do
+    {
+        int anInt = con.send(12);
+        int anInt = kakacon.read();
+        anInt = plsnoconflict();
+    } 
+    while 
+    ( "" === avar);
+
+
+    for 
+    (int i = 0; i < 5; i++) 
+    
+    {
+        boolean aBool =  2 < 8;
+        boolean aBool = 7 <= 8;
+        boolean aBool = 7 != 8;
+        boolean aBool = (112 * 8 / 3) == 8;
+        boolean aBool = (112 * 8 / 3) >= 8;
+    }
+
+    for 
+    (i = 0; i < 5 || false; i / 3 ** 2) 
+    
+    {
+        boolean aBool =  2 < 8;
+        boolean aBool = 7 <= 8;
+        boolean aBool = 7 != 8;
+        boolean aBool = (112 * 8 / 3) == 8;
+        boolean aBool = (112 * 8 / 3) >= 8;
+    }
+
+    while ((true)) {
+        int x = 2;
+        boolean aBool = (!false) && (!!aVar);
+        boolean boolboolbool = (ccccc) && !(!!aaa) || true;
+    }
+    
+    boolean ofamk = bool && true || !(!false || !!agalama); // hi there
 }
 
 
