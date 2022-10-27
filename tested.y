@@ -81,29 +81,9 @@ assignment_operand:
 				        
                          ;
 
-
-define_fcn: FUNCTION_DEF fcn_return_type fcn_name LP param_list RP RBRACE stmt_list_with_if LBRACE;
-
-param_list: empty    
-            | var_type IDENTIFIER
-            | var_type IDENTIFIER COMMA param_list
-            ;
-
-param_list_no_type: empty   
-                | IDENTIFIER
-                | IDENTIFIER COMMA param_list_no_type
-                ;
-
-
-fcn_name: IDENTIFIER;
-fcn_return_type: var_type 
-    | VOID
-    ;
- 
 fcn_call_expr: fcn_call  SEMICOLON;
 
 primitive_function_expr: primitive_functions SEMICOLON;
-
 
 establish_connection_expr: establish_connection SEMICOLON;
 
