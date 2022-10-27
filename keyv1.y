@@ -44,6 +44,7 @@ stmt: decrement_expr
       | return_expr
       | assignment_expr
       | loop_expr
+      | define_fcn
       | NL
       | error NL {
                      printf(" in line %d!\n", lineno);
@@ -60,6 +61,17 @@ increment_expr: increment_operation SEMICOLON;
 increment_operation: IDENTIFIER INCREMENT_OP 
 			         | INCREMENT_OP IDENTIFIER
                      ;
+
+define_fcn: FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list_with_if RBRACE;
+
+param_list: /* empty */
+            | var_type IDENTIFIER
+            | var_type IDENTIFIER COMMA param_list
+            ;
+
+fcn_return_type: var_type 
+                 | VOID
+                 ; 
 
 loop_expr: while_loop
            | do_while_loop
@@ -97,9 +109,9 @@ assignment_operand: str_stmt_return
 boolean_list_for_factor: boolean_list OR_OP and_term
                               | and_term_for_factor
                               | boolean_literal
-                              ///////////////////////////////////////////////////////////////////
-                              | NEGATION_OP boolean_literal ///////////////////////////////////// TEST LINE
-                              ///////////////////////////////////////////////////////////////////
+                              /////////////////////////////////////////////////////////////////
+                              | NEGATION_OP IDENTIFIER ///////////////////////////////////// TEST LINE
+                              /////////////////////////////////////////////////////////////////
                               ;
 
 and_term_for_factor: and_term AND_OP boolean_factor;
@@ -114,7 +126,7 @@ and_term: and_term AND_OP boolean_factor
           ;
 
 boolean_factor: boolean_expr
-             	| LP boolean_list_for_factor RP  /*boolean b = (aBool && helloThere);*/
+             	| LP boolean_list_for_factor RP 
              	| NEGATION_OP LP boolean_list_for_factor RP
                 ;
 
@@ -122,9 +134,11 @@ boolean_expr: boolean_literal
               | NEGATION_OP boolean_expr
               | num_compr_expr
               | num_comparable
-              | string_compr_expr
+              | string_compr_expr // Negation Identifier is not handled here (var && false)
               // | LP FALSE_LITERAL RP
               // | LP TRUE_LITERAL RP
+              // below is test
+              // THIS DOES NOT WORK -> | LP boolean_expr RP
               ;
 
 num_compr_expr: num_comparable comparator_operator num_comparable;
