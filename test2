@@ -150,11 +150,36 @@ main()
 
     while ((true)) {
         int x = 2;
-        boolean aBool = (!false) && (!!aVar);
+        boolean aBool = (!false) && (!aVar);
         boolean boolboolbool = (ccccc) && !(!!aaa) || true;
+        boolean boolvar = (3 < 4);
     }
     
-    boolean ofamk = bool && true || !(!false || !!agalama); // hi there
+    boolean ofamk = bool && true || !(!false || !agalama); // hi there
+
+    function void uyku() {
+        boolean aBool = (112 * 8 / 3) == 8;
+        boolean aBool = (112 * 8 / 3) >= 8;
+    }
+
+    function string uyku(int agala, string kudur, connection cildir) {
+        boolean aBool = (112 * 8 / 3) == 8;
+        boolean aBool = (112 * 8 / 3) >= 8;
+    }
+
+    function string uyku(int agala) 
+    
+    {
+
+
+        boolean aBool = (112 * 8 / 3) == 8;
+        boolean aBool = (112 * 8 / 3) >= 8;
+    }
+
+    function  uyku(int agala, string kudur, connection cildir) {
+        boolean aBool = (112 * 8 / 3) == 8;
+        boolean aBool = (112 * 8 / 3) >= 8;
+    }
 }
 
 

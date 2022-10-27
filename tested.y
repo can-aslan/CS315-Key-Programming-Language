@@ -63,20 +63,6 @@ boolean_expr:
                    | string_compr_expr
 			       | boolean_var
                    ;
-                                      
-
-num_comparable:
-			   | math_stmt
-               ;
-        
-arithmetic_operator: PLUS_OP
-                    | MINUS_OP
-                    | MULT_OP
-                    | DIV_OP
-                    | MODULO_OP
-                    | POWER_OP
-                    ;
-
 
 int_var: IDENTIFIER | fcn_call;
 char_var: IDENTIFIER | fcn_call;
