@@ -22,7 +22,7 @@
 %token <character> CHAR
 %token <string> IDENTIFIER
 %%
-program: MAIN LP RP option_nl LBRACE stmt_list_with_if RBRACE option_nl
+program: MAIN LP RP option_nl LBRACE stmt_list RBRACE option_nl
          | error NL {
                         printf(" in line %d!\n", lineno);
                         yyerrok;
@@ -32,12 +32,60 @@ program: MAIN LP RP option_nl LBRACE stmt_list_with_if RBRACE option_nl
 option_nl: /*empty*/
            | NL option_nl;
 
-stmt_list_with_if: stmt_with_if
-                   | stmt_with_if stmt_list_with_if
-                   ;
+stmt_list: stmt
+           | stmt stmt_list
+           ;
 
-stmt_with_if: stmt;
-stmt: decrement_expr
+stmt: matched
+      | unmatched
+      | error NL {
+                     printf(" in line %d!\n", lineno);
+                     yyerrok;
+                 }
+      ;
+
+      /*
+      {if (false) {
+        stmt
+      }}
+
+      {
+        int i = 5;
+      }
+      */
+
+
+matched: IF LP boolean_list RP matched ELSE matched 
+         | non_if_stmt
+         | LBRACE matched RBRACE
+         ;
+
+unmatched: IF LP boolean_list RP stmt_list
+           | IF LP boolean_list RP matched ELSE unmatched
+           | LBRACE unmatched RBRACE
+           ;
+
+non_if_stmt: decrement_expr
+             | increment_expr
+             | SINGLE_LINE_COMMENT
+             | declaration_expr
+             | return_expr
+             | assignment_expr
+             | loop_expr
+             | define_fcn
+             | fcn_call_expr
+             | primitive_function_expr
+             | NL
+             ;
+
+
+
+
+
+
+
+/////////////////////////////////////
+/*stmt: decrement_expr
       | increment_expr
       | SINGLE_LINE_COMMENT
       | declaration_expr
@@ -45,12 +93,14 @@ stmt: decrement_expr
       | assignment_expr
       | loop_expr
       | define_fcn
+      | fcn_call_expr
+      | primitive_function_expr
       | NL
       | error NL {
                      printf(" in line %d!\n", lineno);
                      yyerrok;
                  }
-      ;
+      ;*/
       
 decrement_expr: decrement_operation SEMICOLON;
 decrement_operation: IDENTIFIER DECREMENT_OP;
@@ -62,7 +112,7 @@ increment_operation: IDENTIFIER INCREMENT_OP
 			         | INCREMENT_OP IDENTIFIER
                      ;
 
-define_fcn: FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list_with_if RBRACE;
+define_fcn: FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list RBRACE;
 
 param_list: /* empty */
             | var_type IDENTIFIER
@@ -78,21 +128,21 @@ loop_expr: while_loop
            | for_loop
            ;
 
-while_loop: WHILE option_nl LP boolean_list RP option_nl LBRACE stmt_list_with_if RBRACE;
+while_loop: WHILE option_nl LP boolean_list RP option_nl LBRACE stmt_list RBRACE;
 
-do_while_loop: DO option_nl LBRACE stmt_list_with_if RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON;
+do_while_loop: DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON;
 
-for_loop: FOR option_nl LP for_expr RP option_nl LBRACE stmt_list_with_if RBRACE;
+for_loop: FOR option_nl LP for_expr RP option_nl LBRACE stmt_list RBRACE;
 for_expr: for_init SEMICOLON boolean_list SEMICOLON for_update;
 for_init: var_type assignment_expr_no_sc
 		  | assignment_expr_no_sc
           ;
 
 for_update: math_stmt
-                 | assignment_expr_no_sc
-		         | decrement_operation
-                 | increment_operation
-                 ;
+            | assignment_expr_no_sc
+		    | decrement_operation
+            | increment_operation
+            ;
 
 declaration_expr: var_type IDENTIFIER SEMICOLON;
                   | var_type assignment_expr;
@@ -105,17 +155,6 @@ assignment_operand: str_stmt_return
                     | SWITCH_IDENTIFIER
                     | boolean_list
                     ;
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-boolean_list_for_factor: boolean_list OR_OP and_term
-                              | and_term_for_factor
-                              | boolean_literal
-                              /////////////////////////////////////////////////////////////////
-                              | NEGATION_OP IDENTIFIER ///////////////////////////////////// TEST LINE
-                              /////////////////////////////////////////////////////////////////
-                              ;
-
-and_term_for_factor: and_term AND_OP boolean_factor;
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 boolean_list: boolean_list OR_OP and_term
 		      | and_term
@@ -126,19 +165,24 @@ and_term: and_term AND_OP boolean_factor
           ;
 
 boolean_factor: boolean_expr
-             	| LP boolean_list_for_factor RP 
-             	| NEGATION_OP LP boolean_list_for_factor RP
+                | boolean_no_math
                 ;
+
+boolean_no_math: NEGATION_OP boolean_no_math
+             	 | LP boolean_list OR_OP and_term RP 
+             	 | LP and_term AND_OP boolean_factor RP 
+                 | LP boolean_literal RP
+                 | LP NEGATION_OP boolean_expr RP
+                 | LP num_compr_expr RP
+                 | LP string_compr_expr RP
+                 | LP boolean_no_math RP
+                 ;
 
 boolean_expr: boolean_literal
               | NEGATION_OP boolean_expr
               | num_compr_expr
               | num_comparable
-              | string_compr_expr // Negation Identifier is not handled here (var && false)
-              // | LP FALSE_LITERAL RP
-              // | LP TRUE_LITERAL RP
-              // below is test
-              // THIS DOES NOT WORK -> | LP boolean_expr RP
+              | string_compr_expr
               ;
 
 num_compr_expr: num_comparable comparator_operator num_comparable;
@@ -194,20 +238,16 @@ math_stmt: math_stmt PLUS_OP term
            | math_stmt MINUS_OP term
            | term
            ;
+      
+fcn_call_expr: fcn_call SEMICOLON;
 
-/* term: factor
-      | term MULT_OP factor
-      | term DIV_OP factor
-      | term MODULO_OP factor
-      | factor POWER_OP term
-      ; */
+primitive_function_expr: primitive_functions SEMICOLON;
 
 term: power
       | term MULT_OP power
       | term DIV_OP power
       | term MODULO_OP power       
       ;
-      //(3 ** 5) / 3
 
 power: power POWER_OP factor
        | factor
@@ -229,17 +269,7 @@ param_list_no_type: /* empty */
 
 fcn_name: IDENTIFIER;
 
-/*
-fcn_return_type: INT_TYPE 
-                 | VOID
-                 ; */
-
-//fcn_call_expr: fcn_call SEMICOLON // Stmt'ye ekle
-
 fcn_call: fcn_name LP param_list_no_type RP;
-
-//primitive_function_expr: primitive_functions SEMICOLON // Stmt'ye ekle
-
 
 primitive_functions: get_timestamp
 				     | get_temperature
@@ -260,8 +290,14 @@ get_air_pressure: AIR_PRESSURE_PF LP RP;
 get_air_quality: AIR_QUALITY_PF LP RP;
 get_light: LIGHT_PF LP RP;
 get_sound_level: SOUND_LEVEL_PF LP frequency RP;
-send: IDENTIFIER DOT SEND_PF LP send_item RP; // UPDATE WITH CONNECTION VAR
-read: IDENTIFIER DOT READ_PF LP RP; // UPDATE WITH CONNECTION VAR
+send: IDENTIFIER DOT SEND_PF LP send_item RP
+      | establish_connection DOT SEND_PF LP send_item RP
+      ;
+
+read: IDENTIFIER DOT READ_PF LP RP;
+      | establish_connection DOT READ_PF LP RP;
+      ;
+
 establish_connection: ESTABLISH_CONN_PF LP str_stmt RP;
 
 send_item: INTEGER | IDENTIFIER;

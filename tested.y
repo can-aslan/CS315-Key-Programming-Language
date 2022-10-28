@@ -47,23 +47,6 @@ unmatched: IF LP boolean_list RP LBRACE stmt_with_if RBRACE
             | stmt_list
             ;
 
-boolean_list: boolean_list OR_OP and_term
-		    | and_term
-            ;//
-
-and_term: and_term AND_OP boolean_factor
-           | boolean_factor
-           ;//
-
-boolean_factor: boolean_expr
-             	| LP boolean_list RP
-                ;///
-
-boolean_expr:
-                   | string_compr_expr
-			       | boolean_var
-                   ;
-
 int_var: IDENTIFIER | fcn_call;
 char_var: IDENTIFIER | fcn_call;
 string_var: IDENTIFIER | fcn_call;
@@ -73,29 +56,11 @@ boolean_var: IDENTIFIER | fcn_call;
 double_var: IDENTIFIER | fcn_call;
 boolean_literal: TRUE_LITERAL | FALSE_LITERAL;
 
-assignment_expr: assignment_expr_no_sc SEMICOLON;        
-assignment_expr_no_sc: IDENTIFIER ASSIGN_OP assignment_operand;
-
-assignment_operand: 
-                         | boolean_list
-				        
-                         ;
-
 fcn_call_expr: fcn_call  SEMICOLON;
 
 primitive_function_expr: primitive_functions SEMICOLON;
 
 establish_connection_expr: establish_connection SEMICOLON;
-
-send_data_expr: send_data SEMICOLON;
-send_data: connection_var DOT SEND_PF LP send_item RP
-                | establish_connection DOT SEND_PF LP send_item RP
-                ;
-
-receive_data_expr: receive_data SEMICOLON;
-receive_data :  connection_var DOT READ_PF LP RP
-                | establish_connection DOT READ_PF LP RP
-                ;
 
 
 switch_stmt: SWITCH_IDENTIFIER ASSIGN_OP boolean_literal SEMICOLON
@@ -104,13 +69,13 @@ switch_stmt: SWITCH_IDENTIFIER ASSIGN_OP boolean_literal SEMICOLON
                   ;
 
 
-empty: /* EMPTY */;
-
 num_comparable: INTEGER
                 | DOUBLE
                 | CHAR 
                 | IDENTIFIER
                 ; 
+
+
 
 %%
 #include "lex.yy.c"
