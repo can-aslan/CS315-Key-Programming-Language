@@ -176,9 +176,36 @@ main()
         boolean aBool = (112 * 8 / 3) >= 8;
     }
 
-    function  uyku(int agala, string kudur, connection cildir) {
+    function double uyku(int agala, string kudur, connection cildir) {
         boolean aBool = (112 * 8 / 3) == 8;
         boolean aBool = (112 * 8 / 3) >= 8;
+        boolean aBool = !(3 < 5);
+        boolean variabul_uyy = !(3 < 4);
+        boolean variabul_uyy = (!(3 < 4) && var );
+        boolean variabul_uyy = ((3 < 4) && var);
+        boolean variabul_uyy = (3 < 4);
+        boolean variabul_uyy = 3 < 4;
+        boolean var = var;
+        boolean var = (var);
+        boolean aVar = (((((((true)))))));
+    }
+
+    establish_connection.send(iAmAnItem);
+    aVar.read();
+    aVar.read(amo);
+
+    if (amgus) {
+
+        aVar.read();
+
+    }
+
+    if (amo && gus) {
+        boolean = amogus;
+    }
+
+    else {
+        int i++;
     }
 }
 
