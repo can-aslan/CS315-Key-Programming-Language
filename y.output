@@ -9,214 +9,213 @@
    5  stmt_list : stmt
    6            | stmt stmt_list
 
-   7  stmt : matched
-   8       | unmatched
-   9       | error NL
+   7  conditional : if_stmt
+   8              | if_else_stmt
 
-  10  matched : IF LP boolean_list RP option_nl matched ELSE option_nl matched
-  11          | non_if_stmt
+   9  if_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE
 
-  12  unmatched : IF LP boolean_list RP option_nl stmt
-  13            | IF LP boolean_list RP option_nl matched ELSE option_nl unmatched
+  10  if_else_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE
 
-  14  non_if_stmt : decrement_expr
-  15              | increment_expr
-  16              | SINGLE_LINE_COMMENT
-  17              | declaration_expr
-  18              | return_expr
-  19              | assignment_expr
-  20              | loop_expr
-  21              | define_fcn
-  22              | fcn_call_expr
-  23              | primitive_function_expr
-  24              | NL
+  11  stmt : decrement_expr
+  12       | increment_expr
+  13       | SINGLE_LINE_COMMENT
+  14       | declaration_expr
+  15       | return_expr
+  16       | assignment_expr
+  17       | loop_expr
+  18       | define_fcn
+  19       | fcn_call_expr
+  20       | primitive_function_expr
+  21       | conditional
+  22       | NL
+  23       | error NL
 
-  25  decrement_expr : decrement_operation SEMICOLON
+  24  decrement_expr : decrement_operation SEMICOLON
 
-  26  decrement_operation : IDENTIFIER DECREMENT_OP
-  27                      | DECREMENT_OP IDENTIFIER
+  25  decrement_operation : IDENTIFIER DECREMENT_OP
+  26                      | DECREMENT_OP IDENTIFIER
 
-  28  increment_expr : increment_operation SEMICOLON
+  27  increment_expr : increment_operation SEMICOLON
 
-  29  increment_operation : IDENTIFIER INCREMENT_OP
-  30                      | INCREMENT_OP IDENTIFIER
+  28  increment_operation : IDENTIFIER INCREMENT_OP
+  29                      | INCREMENT_OP IDENTIFIER
 
-  31  define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list RBRACE
+  30  define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list RBRACE
 
-  32  param_list :
-  33             | var_type IDENTIFIER
-  34             | var_type IDENTIFIER COMMA param_list
+  31  param_list :
+  32             | var_type IDENTIFIER
+  33             | var_type IDENTIFIER COMMA param_list
 
-  35  fcn_return_type : var_type
-  36                  | VOID
+  34  fcn_return_type : var_type
+  35                  | VOID
 
-  37  loop_expr : while_loop
-  38            | do_while_loop
-  39            | for_loop
+  36  loop_expr : while_loop
+  37            | do_while_loop
+  38            | for_loop
 
-  40  while_loop : WHILE option_nl LP boolean_list RP option_nl LBRACE stmt_list RBRACE
+  39  while_loop : WHILE option_nl LP boolean_list RP option_nl LBRACE stmt_list RBRACE
 
-  41  do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON
+  40  do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON
 
-  42  for_loop : FOR option_nl LP for_expr RP option_nl LBRACE stmt_list RBRACE
+  41  for_loop : FOR option_nl LP for_expr RP option_nl LBRACE stmt_list RBRACE
 
-  43  for_expr : for_init SEMICOLON boolean_list SEMICOLON for_update
+  42  for_expr : for_init SEMICOLON boolean_list SEMICOLON for_update
 
-  44  for_init : var_type assignment_expr_no_sc
-  45           | assignment_expr_no_sc
+  43  for_init : var_type assignment_expr_no_sc
+  44           | assignment_expr_no_sc
 
-  46  for_update : math_stmt
-  47             | assignment_expr_no_sc
-  48             | decrement_operation
-  49             | increment_operation
+  45  for_update : math_stmt
+  46             | assignment_expr_no_sc
+  47             | decrement_operation
+  48             | increment_operation
 
-  50  declaration_expr : var_type IDENTIFIER SEMICOLON
-  51                   | var_type assignment_expr
+  49  declaration_expr : var_type IDENTIFIER SEMICOLON
+  50                   | var_type assignment_expr
 
-  52  assignment_expr : assignment_expr_no_sc SEMICOLON
+  51  assignment_expr : assignment_expr_no_sc SEMICOLON
 
-  53  assignment_expr_no_sc : IDENTIFIER ASSIGN_OP assignment_operand
+  52  assignment_expr_no_sc : IDENTIFIER ASSIGN_OP assignment_operand
 
-  54  assignment_operand : str_stmt_return
-  55                     | SWITCH_IDENTIFIER
-  56                     | boolean_list
+  53  assignment_operand : str_stmt_return
+  54                     | SWITCH_IDENTIFIER
+  55                     | boolean_list
 
-  57  boolean_list : boolean_list OR_OP and_term
-  58               | and_term
+  56  boolean_list : boolean_list OR_OP and_term
+  57               | and_term
 
-  59  and_term : and_term AND_OP boolean_factor
-  60           | boolean_factor
+  58  and_term : and_term AND_OP boolean_factor
+  59           | boolean_factor
 
-  61  boolean_factor : boolean_expr
-  62                 | boolean_no_math
+  60  boolean_factor : boolean_expr
+  61                 | boolean_no_math
 
-  63  boolean_no_math : NEGATION_OP boolean_no_math
-  64                  | LP boolean_list OR_OP and_term RP
-  65                  | LP and_term AND_OP boolean_factor RP
-  66                  | LP boolean_literal RP
-  67                  | LP NEGATION_OP boolean_expr RP
-  68                  | LP num_compr_expr RP
-  69                  | LP string_compr_expr RP
-  70                  | LP boolean_no_math RP
+  62  boolean_no_math : NEGATION_OP boolean_no_math
+  63                  | LP boolean_list OR_OP and_term RP
+  64                  | LP and_term AND_OP boolean_factor RP
+  65                  | LP boolean_literal RP
+  66                  | LP NEGATION_OP boolean_expr RP
+  67                  | LP num_compr_expr RP
+  68                  | LP string_compr_expr RP
+  69                  | LP boolean_no_math RP
 
-  71  boolean_expr : boolean_literal
-  72               | NEGATION_OP boolean_expr
-  73               | num_compr_expr
-  74               | num_comparable
-  75               | string_compr_expr
+  70  boolean_expr : boolean_literal
+  71               | NEGATION_OP boolean_expr
+  72               | num_compr_expr
+  73               | num_comparable
+  74               | string_compr_expr
 
-  76  num_compr_expr : num_comparable comparator_operator num_comparable
+  75  num_compr_expr : num_comparable comparator_operator num_comparable
 
-  77  string_compr_expr : str_stmt equal_or_not_operator str_stmt
+  76  string_compr_expr : str_stmt equal_or_not_operator str_stmt
 
-  78  comparator_operator : GREATER_OP
-  79                      | LESS_OP
-  80                      | GREAT_OR_EQUAL_OP
-  81                      | LESS_OR_EQUAL_OP
-  82                      | EQUALITY_OP
-  83                      | NOT_EQUALITY_OP
+  77  comparator_operator : GREATER_OP
+  78                      | LESS_OP
+  79                      | GREAT_OR_EQUAL_OP
+  80                      | LESS_OR_EQUAL_OP
+  81                      | EQUALITY_OP
+  82                      | NOT_EQUALITY_OP
 
-  84  equal_or_not_operator : STR_EQUALITY_OP
-  85                        | STR_NOT_EQUALITY_OP
+  83  equal_or_not_operator : STR_EQUALITY_OP
+  84                        | STR_NOT_EQUALITY_OP
 
-  86  var_type : INT_TYPE
-  87           | CHAR_TYPE
-  88           | STRING_TYPE
-  89           | CONNECTION_TYPE
-  90           | BOOLEAN_TYPE
-  91           | TIMESTAMP_TYPE
-  92           | DOUBLE_TYPE
+  85  var_type : INT_TYPE
+  86           | CHAR_TYPE
+  87           | STRING_TYPE
+  88           | CONNECTION_TYPE
+  89           | BOOLEAN_TYPE
+  90           | TIMESTAMP_TYPE
+  91           | DOUBLE_TYPE
 
-  93  boolean_literal : TRUE_LITERAL
-  94                  | FALSE_LITERAL
+  92  boolean_literal : TRUE_LITERAL
+  93                  | FALSE_LITERAL
 
-  95  return_expr : RETURN return_stmt SEMICOLON
+  94  return_expr : RETURN return_stmt SEMICOLON
 
-  96  return_stmt :
-  97              | str_stmt_return
-  98              | num_comparable
+  95  return_stmt :
+  96              | str_stmt_return
+  97              | num_comparable
 
-  99  str_stmt : STRING
- 100           | IDENTIFIER
- 101           | STRING CONCAT_OP str_stmt
- 102           | IDENTIFIER CONCAT_OP str_stmt
+  98  str_stmt : STRING
+  99           | IDENTIFIER
+ 100           | STRING CONCAT_OP str_stmt
+ 101           | IDENTIFIER CONCAT_OP str_stmt
 
- 103  str_stmt_return : STRING
- 104                  | STRING CONCAT_OP str_stmt
- 105                  | IDENTIFIER CONCAT_OP str_stmt
+ 102  str_stmt_return : STRING
+ 103                  | STRING CONCAT_OP str_stmt
+ 104                  | IDENTIFIER CONCAT_OP str_stmt
 
- 106  num_comparable : CHAR
- 107                 | math_stmt
+ 105  num_comparable : CHAR
+ 106                 | math_stmt
 
- 108  math_stmt : math_stmt PLUS_OP term
- 109            | math_stmt MINUS_OP term
- 110            | term
+ 107  math_stmt : math_stmt PLUS_OP term
+ 108            | math_stmt MINUS_OP term
+ 109            | term
 
- 111  fcn_call_expr : fcn_call SEMICOLON
+ 110  fcn_call_expr : fcn_call SEMICOLON
 
- 112  primitive_function_expr : primitive_functions SEMICOLON
+ 111  primitive_function_expr : primitive_functions SEMICOLON
 
- 113  term : power
- 114       | term MULT_OP power
- 115       | term DIV_OP power
- 116       | term MODULO_OP power
+ 112  term : power
+ 113       | term MULT_OP power
+ 114       | term DIV_OP power
+ 115       | term MODULO_OP power
 
- 117  power : power POWER_OP factor
- 118        | factor
+ 116  power : power POWER_OP factor
+ 117        | factor
 
- 119  factor : INTEGER
- 120         | DOUBLE
- 121         | IDENTIFIER
- 122         | fcn_call
- 123         | primitive_functions
- 124         | LP math_stmt RP
+ 118  factor : INTEGER
+ 119         | DOUBLE
+ 120         | IDENTIFIER
+ 121         | fcn_call
+ 122         | primitive_functions
+ 123         | LP math_stmt RP
 
- 125  param_list_no_type :
- 126                     | IDENTIFIER
- 127                     | IDENTIFIER COMMA param_list_no_type
+ 124  param_list_no_type :
+ 125                     | IDENTIFIER
+ 126                     | IDENTIFIER COMMA param_list_no_type
 
- 128  fcn_name : IDENTIFIER
+ 127  fcn_name : IDENTIFIER
 
- 129  fcn_call : fcn_name LP param_list_no_type RP
+ 128  fcn_call : fcn_name LP param_list_no_type RP
 
- 130  primitive_functions : get_timestamp
- 131                      | get_temperature
- 132                      | get_humidity
- 133                      | get_air_pressure
- 134                      | get_air_quality
- 135                      | get_light
- 136                      | get_sound_level
- 137                      | send
- 138                      | read
- 139                      | establish_connection
+ 129  primitive_functions : get_timestamp
+ 130                      | get_temperature
+ 131                      | get_humidity
+ 132                      | get_air_pressure
+ 133                      | get_air_quality
+ 134                      | get_light
+ 135                      | get_sound_level
+ 136                      | send
+ 137                      | read
+ 138                      | establish_connection
 
- 140  get_timestamp : TIMESTAMP_PF LP RP
+ 139  get_timestamp : TIMESTAMP_PF LP RP
 
- 141  get_temperature : TEMPERATURE_PF LP RP
+ 140  get_temperature : TEMPERATURE_PF LP RP
 
- 142  get_humidity : HUMIDITY_PF LP RP
+ 141  get_humidity : HUMIDITY_PF LP RP
 
- 143  get_air_pressure : AIR_PRESSURE_PF LP RP
+ 142  get_air_pressure : AIR_PRESSURE_PF LP RP
 
- 144  get_air_quality : AIR_QUALITY_PF LP RP
+ 143  get_air_quality : AIR_QUALITY_PF LP RP
 
- 145  get_light : LIGHT_PF LP RP
+ 144  get_light : LIGHT_PF LP RP
 
- 146  get_sound_level : SOUND_LEVEL_PF LP frequency RP
+ 145  get_sound_level : SOUND_LEVEL_PF LP frequency RP
 
- 147  send : IDENTIFIER DOT SEND_PF LP send_item RP
- 148       | establish_connection DOT SEND_PF LP send_item RP
+ 146  send : IDENTIFIER DOT SEND_PF LP send_item RP
+ 147       | establish_connection DOT SEND_PF LP send_item RP
 
- 149  read : IDENTIFIER DOT READ_PF LP RP
- 150       | establish_connection DOT READ_PF LP RP
+ 148  read : IDENTIFIER DOT READ_PF LP RP
+ 149       | establish_connection DOT READ_PF LP RP
 
- 151  establish_connection : ESTABLISH_CONN_PF LP str_stmt RP
+ 150  establish_connection : ESTABLISH_CONN_PF LP str_stmt RP
 
- 152  send_item : INTEGER
- 153            | IDENTIFIER
+ 151  send_item : INTEGER
+ 152            | IDENTIFIER
 
- 154  frequency : IDENTIFIER
- 155            | DOUBLE
+ 153  frequency : IDENTIFIER
+ 154            | DOUBLE
 
 state 0
 	$accept : . program $end  (0)
@@ -271,41 +270,16 @@ state 6
 	option_nl  goto 8
 
 
-7: shift/reduce conflict (shift 7, reduce 3) on NL
 state 7
 	option_nl : NL . option_nl  (4)
 	option_nl : .  (3)
 
 	NL  shift 7
 	$end  reduce 3
-	error  reduce 3
-	IF  reduce 3
-	FOR  reduce 3
 	WHILE  reduce 3
-	DO  reduce 3
-	FUNCTION_DEF  reduce 3
-	RETURN  reduce 3
-	BOOLEAN_TYPE  reduce 3
-	INT_TYPE  reduce 3
-	STRING_TYPE  reduce 3
-	CHAR_TYPE  reduce 3
-	CONNECTION_TYPE  reduce 3
-	TIMESTAMP_TYPE  reduce 3
-	DOUBLE_TYPE  reduce 3
-	TIMESTAMP_PF  reduce 3
-	TEMPERATURE_PF  reduce 3
-	HUMIDITY_PF  reduce 3
-	AIR_PRESSURE_PF  reduce 3
-	AIR_QUALITY_PF  reduce 3
-	LIGHT_PF  reduce 3
-	SOUND_LEVEL_PF  reduce 3
+	ELSE  reduce 3
 	LP  reduce 3
 	LBRACE  reduce 3
-	SINGLE_LINE_COMMENT  reduce 3
-	INCREMENT_OP  reduce 3
-	DECREMENT_OP  reduce 3
-	ESTABLISH_CONN_PF  reduce 3
-	IDENTIFIER  reduce 3
 
 	option_nl  goto 9
 
@@ -357,9 +331,9 @@ state 10
 
 	stmt_list  goto 38
 	stmt  goto 39
-	matched  goto 40
-	unmatched  goto 41
-	non_if_stmt  goto 42
+	conditional  goto 40
+	if_stmt  goto 41
+	if_else_stmt  goto 42
 	decrement_expr  goto 43
 	increment_expr  goto 44
 	declaration_expr  goto 45
@@ -392,23 +366,22 @@ state 10
 
 
 state 11
-	stmt : error . NL  (9)
+	stmt : error . NL  (23)
 
 	NL  shift 72
 	.  error
 
 
 state 12
-	matched : IF . LP boolean_list RP option_nl matched ELSE option_nl matched  (10)
-	unmatched : IF . LP boolean_list RP option_nl stmt  (12)
-	unmatched : IF . LP boolean_list RP option_nl matched ELSE option_nl unmatched  (13)
+	if_stmt : IF . LP boolean_list RP option_nl LBRACE stmt_list RBRACE  (9)
+	if_else_stmt : IF . LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE  (10)
 
 	LP  shift 73
 	.  error
 
 
 state 13
-	for_loop : FOR . option_nl LP for_expr RP option_nl LBRACE stmt_list RBRACE  (42)
+	for_loop : FOR . option_nl LP for_expr RP option_nl LBRACE stmt_list RBRACE  (41)
 	option_nl : .  (3)
 
 	NL  shift 7
@@ -418,7 +391,7 @@ state 13
 
 
 state 14
-	while_loop : WHILE . option_nl LP boolean_list RP option_nl LBRACE stmt_list RBRACE  (40)
+	while_loop : WHILE . option_nl LP boolean_list RP option_nl LBRACE stmt_list RBRACE  (39)
 	option_nl : .  (3)
 
 	NL  shift 7
@@ -428,7 +401,7 @@ state 14
 
 
 state 15
-	do_while_loop : DO . option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (41)
+	do_while_loop : DO . option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (40)
 	option_nl : .  (3)
 
 	NL  shift 7
@@ -438,7 +411,7 @@ state 15
 
 
 state 16
-	define_fcn : FUNCTION_DEF . fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list RBRACE  (31)
+	define_fcn : FUNCTION_DEF . fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list RBRACE  (30)
 
 	BOOLEAN_TYPE  shift 18
 	INT_TYPE  shift 19
@@ -455,8 +428,8 @@ state 16
 
 
 state 17
-	return_expr : RETURN . return_stmt SEMICOLON  (95)
-	return_stmt : .  (96)
+	return_expr : RETURN . return_stmt SEMICOLON  (94)
+	return_stmt : .  (95)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -472,7 +445,7 @@ state 17
 	STRING  shift 83
 	CHAR  shift 84
 	IDENTIFIER  shift 85
-	SEMICOLON  reduce 96
+	SEMICOLON  reduce 95
 
 	fcn_name  goto 54
 	math_stmt  goto 86
@@ -497,142 +470,142 @@ state 17
 
 
 state 18
-	var_type : BOOLEAN_TYPE .  (90)
-
-	.  reduce 90
-
-
-state 19
-	var_type : INT_TYPE .  (86)
-
-	.  reduce 86
-
-
-state 20
-	var_type : STRING_TYPE .  (88)
-
-	.  reduce 88
-
-
-state 21
-	var_type : CHAR_TYPE .  (87)
-
-	.  reduce 87
-
-
-state 22
-	var_type : CONNECTION_TYPE .  (89)
+	var_type : BOOLEAN_TYPE .  (89)
 
 	.  reduce 89
 
 
+state 19
+	var_type : INT_TYPE .  (85)
+
+	.  reduce 85
+
+
+state 20
+	var_type : STRING_TYPE .  (87)
+
+	.  reduce 87
+
+
+state 21
+	var_type : CHAR_TYPE .  (86)
+
+	.  reduce 86
+
+
+state 22
+	var_type : CONNECTION_TYPE .  (88)
+
+	.  reduce 88
+
+
 state 23
-	var_type : TIMESTAMP_TYPE .  (91)
+	var_type : TIMESTAMP_TYPE .  (90)
+
+	.  reduce 90
+
+
+state 24
+	var_type : DOUBLE_TYPE .  (91)
 
 	.  reduce 91
 
 
-state 24
-	var_type : DOUBLE_TYPE .  (92)
-
-	.  reduce 92
-
-
 state 25
-	get_timestamp : TIMESTAMP_PF . LP RP  (140)
+	get_timestamp : TIMESTAMP_PF . LP RP  (139)
 
 	LP  shift 95
 	.  error
 
 
 state 26
-	get_temperature : TEMPERATURE_PF . LP RP  (141)
+	get_temperature : TEMPERATURE_PF . LP RP  (140)
 
 	LP  shift 96
 	.  error
 
 
 state 27
-	get_humidity : HUMIDITY_PF . LP RP  (142)
+	get_humidity : HUMIDITY_PF . LP RP  (141)
 
 	LP  shift 97
 	.  error
 
 
 state 28
-	get_air_pressure : AIR_PRESSURE_PF . LP RP  (143)
+	get_air_pressure : AIR_PRESSURE_PF . LP RP  (142)
 
 	LP  shift 98
 	.  error
 
 
 state 29
-	get_air_quality : AIR_QUALITY_PF . LP RP  (144)
+	get_air_quality : AIR_QUALITY_PF . LP RP  (143)
 
 	LP  shift 99
 	.  error
 
 
 state 30
-	get_light : LIGHT_PF . LP RP  (145)
+	get_light : LIGHT_PF . LP RP  (144)
 
 	LP  shift 100
 	.  error
 
 
 state 31
-	get_sound_level : SOUND_LEVEL_PF . LP frequency RP  (146)
+	get_sound_level : SOUND_LEVEL_PF . LP frequency RP  (145)
 
 	LP  shift 101
 	.  error
 
 
 state 32
-	non_if_stmt : NL .  (24)
+	stmt : NL .  (22)
 
-	.  reduce 24
+	.  reduce 22
 
 
 state 33
-	non_if_stmt : SINGLE_LINE_COMMENT .  (16)
+	stmt : SINGLE_LINE_COMMENT .  (13)
 
-	.  reduce 16
+	.  reduce 13
 
 
 state 34
-	increment_operation : INCREMENT_OP . IDENTIFIER  (30)
+	increment_operation : INCREMENT_OP . IDENTIFIER  (29)
 
 	IDENTIFIER  shift 102
 	.  error
 
 
 state 35
-	decrement_operation : DECREMENT_OP . IDENTIFIER  (27)
+	decrement_operation : DECREMENT_OP . IDENTIFIER  (26)
 
 	IDENTIFIER  shift 103
 	.  error
 
 
 state 36
-	establish_connection : ESTABLISH_CONN_PF . LP str_stmt RP  (151)
+	establish_connection : ESTABLISH_CONN_PF . LP str_stmt RP  (150)
 
 	LP  shift 104
 	.  error
 
 
 state 37
-	decrement_operation : IDENTIFIER . DECREMENT_OP  (26)
-	increment_operation : IDENTIFIER . INCREMENT_OP  (29)
-	assignment_expr_no_sc : IDENTIFIER . ASSIGN_OP assignment_operand  (53)
-	fcn_name : IDENTIFIER .  (128)
-	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (147)
-	read : IDENTIFIER . DOT READ_PF LP RP  (149)
+	decrement_operation : IDENTIFIER . DECREMENT_OP  (25)
+	increment_operation : IDENTIFIER . INCREMENT_OP  (28)
+	assignment_expr_no_sc : IDENTIFIER . ASSIGN_OP assignment_operand  (52)
+	fcn_name : IDENTIFIER .  (127)
+	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (146)
+	read : IDENTIFIER . DOT READ_PF LP RP  (148)
 
 	INCREMENT_OP  shift 105
 	DECREMENT_OP  shift 106
 	ASSIGN_OP  shift 107
 	DOT  shift 108
-	LP  reduce 128
+	LP  reduce 127
 
 
 state 38
@@ -677,9 +650,9 @@ state 39
 
 	stmt_list  goto 110
 	stmt  goto 39
-	matched  goto 40
-	unmatched  goto 41
-	non_if_stmt  goto 42
+	conditional  goto 40
+	if_stmt  goto 41
+	if_else_stmt  goto 42
 	decrement_expr  goto 43
 	increment_expr  goto 44
 	declaration_expr  goto 45
@@ -712,101 +685,101 @@ state 39
 
 
 state 40
-	stmt : matched .  (7)
-
-	.  reduce 7
-
-
-state 41
-	stmt : unmatched .  (8)
-
-	.  reduce 8
-
-
-state 42
-	matched : non_if_stmt .  (11)
-
-	.  reduce 11
-
-
-state 43
-	non_if_stmt : decrement_expr .  (14)
-
-	.  reduce 14
-
-
-state 44
-	non_if_stmt : increment_expr .  (15)
-
-	.  reduce 15
-
-
-state 45
-	non_if_stmt : declaration_expr .  (17)
-
-	.  reduce 17
-
-
-state 46
-	non_if_stmt : return_expr .  (18)
-
-	.  reduce 18
-
-
-state 47
-	non_if_stmt : assignment_expr .  (19)
-
-	.  reduce 19
-
-
-state 48
-	non_if_stmt : loop_expr .  (20)
-
-	.  reduce 20
-
-
-state 49
-	non_if_stmt : define_fcn .  (21)
+	stmt : conditional .  (21)
 
 	.  reduce 21
 
 
-state 50
-	non_if_stmt : fcn_call_expr .  (22)
+state 41
+	conditional : if_stmt .  (7)
 
-	.  reduce 22
+	.  reduce 7
+
+
+state 42
+	conditional : if_else_stmt .  (8)
+
+	.  reduce 8
+
+
+state 43
+	stmt : decrement_expr .  (11)
+
+	.  reduce 11
+
+
+state 44
+	stmt : increment_expr .  (12)
+
+	.  reduce 12
+
+
+state 45
+	stmt : declaration_expr .  (14)
+
+	.  reduce 14
+
+
+state 46
+	stmt : return_expr .  (15)
+
+	.  reduce 15
+
+
+state 47
+	stmt : assignment_expr .  (16)
+
+	.  reduce 16
+
+
+state 48
+	stmt : loop_expr .  (17)
+
+	.  reduce 17
+
+
+state 49
+	stmt : define_fcn .  (18)
+
+	.  reduce 18
+
+
+state 50
+	stmt : fcn_call_expr .  (19)
+
+	.  reduce 19
 
 
 state 51
-	non_if_stmt : primitive_function_expr .  (23)
+	stmt : primitive_function_expr .  (20)
 
-	.  reduce 23
+	.  reduce 20
 
 
 state 52
-	decrement_expr : decrement_operation . SEMICOLON  (25)
+	decrement_expr : decrement_operation . SEMICOLON  (24)
 
 	SEMICOLON  shift 111
 	.  error
 
 
 state 53
-	increment_expr : increment_operation . SEMICOLON  (28)
+	increment_expr : increment_operation . SEMICOLON  (27)
 
 	SEMICOLON  shift 112
 	.  error
 
 
 state 54
-	fcn_call : fcn_name . LP param_list_no_type RP  (129)
+	fcn_call : fcn_name . LP param_list_no_type RP  (128)
 
 	LP  shift 113
 	.  error
 
 
 state 55
-	declaration_expr : var_type . IDENTIFIER SEMICOLON  (50)
-	declaration_expr : var_type . assignment_expr  (51)
+	declaration_expr : var_type . IDENTIFIER SEMICOLON  (49)
+	declaration_expr : var_type . assignment_expr  (50)
 
 	IDENTIFIER  shift 114
 	.  error
@@ -816,132 +789,131 @@ state 55
 
 
 state 56
-	loop_expr : while_loop .  (37)
+	loop_expr : while_loop .  (36)
+
+	.  reduce 36
+
+
+state 57
+	loop_expr : do_while_loop .  (37)
 
 	.  reduce 37
 
 
-state 57
-	loop_expr : do_while_loop .  (38)
+state 58
+	loop_expr : for_loop .  (38)
 
 	.  reduce 38
 
 
-state 58
-	loop_expr : for_loop .  (39)
-
-	.  reduce 39
-
-
 state 59
-	assignment_expr : assignment_expr_no_sc . SEMICOLON  (52)
+	assignment_expr : assignment_expr_no_sc . SEMICOLON  (51)
 
 	SEMICOLON  shift 116
 	.  error
 
 
 state 60
-	fcn_call_expr : fcn_call . SEMICOLON  (111)
+	fcn_call_expr : fcn_call . SEMICOLON  (110)
 
 	SEMICOLON  shift 117
 	.  error
 
 
 state 61
-	primitive_function_expr : primitive_functions . SEMICOLON  (112)
+	primitive_function_expr : primitive_functions . SEMICOLON  (111)
 
 	SEMICOLON  shift 118
 	.  error
 
 
 state 62
-	primitive_functions : get_timestamp .  (130)
+	primitive_functions : get_timestamp .  (129)
+
+	.  reduce 129
+
+
+state 63
+	primitive_functions : get_temperature .  (130)
 
 	.  reduce 130
 
 
-state 63
-	primitive_functions : get_temperature .  (131)
+state 64
+	primitive_functions : get_humidity .  (131)
 
 	.  reduce 131
 
 
-state 64
-	primitive_functions : get_humidity .  (132)
+state 65
+	primitive_functions : get_air_pressure .  (132)
 
 	.  reduce 132
 
 
-state 65
-	primitive_functions : get_air_pressure .  (133)
+state 66
+	primitive_functions : get_air_quality .  (133)
 
 	.  reduce 133
 
 
-state 66
-	primitive_functions : get_air_quality .  (134)
+state 67
+	primitive_functions : get_light .  (134)
 
 	.  reduce 134
 
 
-state 67
-	primitive_functions : get_light .  (135)
+state 68
+	primitive_functions : get_sound_level .  (135)
 
 	.  reduce 135
 
 
-state 68
-	primitive_functions : get_sound_level .  (136)
+state 69
+	primitive_functions : send .  (136)
 
 	.  reduce 136
 
 
-state 69
-	primitive_functions : send .  (137)
+state 70
+	primitive_functions : read .  (137)
 
 	.  reduce 137
 
 
-state 70
-	primitive_functions : read .  (138)
-
-	.  reduce 138
-
-
 state 71
-	primitive_functions : establish_connection .  (139)
-	send : establish_connection . DOT SEND_PF LP send_item RP  (148)
-	read : establish_connection . DOT READ_PF LP RP  (150)
+	primitive_functions : establish_connection .  (138)
+	send : establish_connection . DOT SEND_PF LP send_item RP  (147)
+	read : establish_connection . DOT READ_PF LP RP  (149)
 
 	DOT  shift 119
-	AND_OP  reduce 139
-	OR_OP  reduce 139
-	GREATER_OP  reduce 139
-	LESS_OP  reduce 139
-	GREAT_OR_EQUAL_OP  reduce 139
-	LESS_OR_EQUAL_OP  reduce 139
-	EQUALITY_OP  reduce 139
-	NOT_EQUALITY_OP  reduce 139
-	RP  reduce 139
-	SEMICOLON  reduce 139
-	PLUS_OP  reduce 139
-	MINUS_OP  reduce 139
-	DIV_OP  reduce 139
-	MULT_OP  reduce 139
-	POWER_OP  reduce 139
-	MODULO_OP  reduce 139
+	AND_OP  reduce 138
+	OR_OP  reduce 138
+	GREATER_OP  reduce 138
+	LESS_OP  reduce 138
+	GREAT_OR_EQUAL_OP  reduce 138
+	LESS_OR_EQUAL_OP  reduce 138
+	EQUALITY_OP  reduce 138
+	NOT_EQUALITY_OP  reduce 138
+	RP  reduce 138
+	SEMICOLON  reduce 138
+	PLUS_OP  reduce 138
+	MINUS_OP  reduce 138
+	DIV_OP  reduce 138
+	MULT_OP  reduce 138
+	POWER_OP  reduce 138
+	MODULO_OP  reduce 138
 
 
 state 72
-	stmt : error NL .  (9)
+	stmt : error NL .  (23)
 
-	.  reduce 9
+	.  reduce 23
 
 
 state 73
-	matched : IF LP . boolean_list RP option_nl matched ELSE option_nl matched  (10)
-	unmatched : IF LP . boolean_list RP option_nl stmt  (12)
-	unmatched : IF LP . boolean_list RP option_nl matched ELSE option_nl unmatched  (13)
+	if_stmt : IF LP . boolean_list RP option_nl LBRACE stmt_list RBRACE  (9)
+	if_else_stmt : IF LP . boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE  (10)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -992,34 +964,34 @@ state 73
 
 
 state 74
-	for_loop : FOR option_nl . LP for_expr RP option_nl LBRACE stmt_list RBRACE  (42)
+	for_loop : FOR option_nl . LP for_expr RP option_nl LBRACE stmt_list RBRACE  (41)
 
 	LP  shift 136
 	.  error
 
 
 state 75
-	while_loop : WHILE option_nl . LP boolean_list RP option_nl LBRACE stmt_list RBRACE  (40)
+	while_loop : WHILE option_nl . LP boolean_list RP option_nl LBRACE stmt_list RBRACE  (39)
 
 	LP  shift 137
 	.  error
 
 
 state 76
-	do_while_loop : DO option_nl . LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (41)
+	do_while_loop : DO option_nl . LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (40)
 
 	LBRACE  shift 138
 	.  error
 
 
 state 77
-	fcn_return_type : VOID .  (36)
+	fcn_return_type : VOID .  (35)
 
-	.  reduce 36
+	.  reduce 35
 
 
 state 78
-	define_fcn : FUNCTION_DEF fcn_return_type . fcn_name LP param_list RP option_nl LBRACE stmt_list RBRACE  (31)
+	define_fcn : FUNCTION_DEF fcn_return_type . fcn_name LP param_list RP option_nl LBRACE stmt_list RBRACE  (30)
 
 	IDENTIFIER  shift 139
 	.  error
@@ -1028,13 +1000,13 @@ state 78
 
 
 state 79
-	fcn_return_type : var_type .  (35)
+	fcn_return_type : var_type .  (34)
 
-	.  reduce 35
+	.  reduce 34
 
 
 state 80
-	factor : LP . math_stmt RP  (124)
+	factor : LP . math_stmt RP  (123)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -1070,195 +1042,195 @@ state 80
 
 
 state 81
-	factor : INTEGER .  (119)
+	factor : INTEGER .  (118)
+
+	.  reduce 118
+
+
+state 82
+	factor : DOUBLE .  (119)
 
 	.  reduce 119
 
 
-state 82
-	factor : DOUBLE .  (120)
-
-	.  reduce 120
-
-
 state 83
-	str_stmt_return : STRING .  (103)
-	str_stmt_return : STRING . CONCAT_OP str_stmt  (104)
+	str_stmt_return : STRING .  (102)
+	str_stmt_return : STRING . CONCAT_OP str_stmt  (103)
 
 	CONCAT_OP  shift 143
-	SEMICOLON  reduce 103
+	SEMICOLON  reduce 102
 
 
 state 84
-	num_comparable : CHAR .  (106)
+	num_comparable : CHAR .  (105)
 
-	.  reduce 106
+	.  reduce 105
 
 
 state 85
-	str_stmt_return : IDENTIFIER . CONCAT_OP str_stmt  (105)
-	factor : IDENTIFIER .  (121)
-	fcn_name : IDENTIFIER .  (128)
-	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (147)
-	read : IDENTIFIER . DOT READ_PF LP RP  (149)
+	str_stmt_return : IDENTIFIER . CONCAT_OP str_stmt  (104)
+	factor : IDENTIFIER .  (120)
+	fcn_name : IDENTIFIER .  (127)
+	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (146)
+	read : IDENTIFIER . DOT READ_PF LP RP  (148)
 
 	DOT  shift 108
 	CONCAT_OP  shift 144
-	LP  reduce 128
-	SEMICOLON  reduce 121
-	PLUS_OP  reduce 121
-	MINUS_OP  reduce 121
-	DIV_OP  reduce 121
-	MULT_OP  reduce 121
-	POWER_OP  reduce 121
-	MODULO_OP  reduce 121
+	LP  reduce 127
+	SEMICOLON  reduce 120
+	PLUS_OP  reduce 120
+	MINUS_OP  reduce 120
+	DIV_OP  reduce 120
+	MULT_OP  reduce 120
+	POWER_OP  reduce 120
+	MODULO_OP  reduce 120
 
 
 state 86
-	num_comparable : math_stmt .  (107)
-	math_stmt : math_stmt . PLUS_OP term  (108)
-	math_stmt : math_stmt . MINUS_OP term  (109)
+	num_comparable : math_stmt .  (106)
+	math_stmt : math_stmt . PLUS_OP term  (107)
+	math_stmt : math_stmt . MINUS_OP term  (108)
 
 	PLUS_OP  shift 145
 	MINUS_OP  shift 146
-	AND_OP  reduce 107
-	OR_OP  reduce 107
-	GREATER_OP  reduce 107
-	LESS_OP  reduce 107
-	GREAT_OR_EQUAL_OP  reduce 107
-	LESS_OR_EQUAL_OP  reduce 107
-	EQUALITY_OP  reduce 107
-	NOT_EQUALITY_OP  reduce 107
-	RP  reduce 107
-	SEMICOLON  reduce 107
+	AND_OP  reduce 106
+	OR_OP  reduce 106
+	GREATER_OP  reduce 106
+	LESS_OP  reduce 106
+	GREAT_OR_EQUAL_OP  reduce 106
+	LESS_OR_EQUAL_OP  reduce 106
+	EQUALITY_OP  reduce 106
+	NOT_EQUALITY_OP  reduce 106
+	RP  reduce 106
+	SEMICOLON  reduce 106
 
 
 state 87
-	return_stmt : str_stmt_return .  (97)
+	return_stmt : str_stmt_return .  (96)
+
+	.  reduce 96
+
+
+state 88
+	return_stmt : num_comparable .  (97)
 
 	.  reduce 97
 
 
-state 88
-	return_stmt : num_comparable .  (98)
-
-	.  reduce 98
-
-
 state 89
-	return_expr : RETURN return_stmt . SEMICOLON  (95)
+	return_expr : RETURN return_stmt . SEMICOLON  (94)
 
 	SEMICOLON  shift 147
 	.  error
 
 
 state 90
-	math_stmt : term .  (110)
-	term : term . MULT_OP power  (114)
-	term : term . DIV_OP power  (115)
-	term : term . MODULO_OP power  (116)
+	math_stmt : term .  (109)
+	term : term . MULT_OP power  (113)
+	term : term . DIV_OP power  (114)
+	term : term . MODULO_OP power  (115)
 
 	DIV_OP  shift 148
 	MULT_OP  shift 149
 	MODULO_OP  shift 150
-	AND_OP  reduce 110
-	OR_OP  reduce 110
-	GREATER_OP  reduce 110
-	LESS_OP  reduce 110
-	GREAT_OR_EQUAL_OP  reduce 110
-	LESS_OR_EQUAL_OP  reduce 110
-	EQUALITY_OP  reduce 110
-	NOT_EQUALITY_OP  reduce 110
-	RP  reduce 110
-	SEMICOLON  reduce 110
-	PLUS_OP  reduce 110
-	MINUS_OP  reduce 110
+	AND_OP  reduce 109
+	OR_OP  reduce 109
+	GREATER_OP  reduce 109
+	LESS_OP  reduce 109
+	GREAT_OR_EQUAL_OP  reduce 109
+	LESS_OR_EQUAL_OP  reduce 109
+	EQUALITY_OP  reduce 109
+	NOT_EQUALITY_OP  reduce 109
+	RP  reduce 109
+	SEMICOLON  reduce 109
+	PLUS_OP  reduce 109
+	MINUS_OP  reduce 109
 
 
 state 91
-	factor : fcn_call .  (122)
+	factor : fcn_call .  (121)
+
+	.  reduce 121
+
+
+state 92
+	factor : primitive_functions .  (122)
 
 	.  reduce 122
 
 
-state 92
-	factor : primitive_functions .  (123)
-
-	.  reduce 123
-
-
 state 93
-	term : power .  (113)
-	power : power . POWER_OP factor  (117)
+	term : power .  (112)
+	power : power . POWER_OP factor  (116)
 
 	POWER_OP  shift 151
-	AND_OP  reduce 113
-	OR_OP  reduce 113
-	GREATER_OP  reduce 113
-	LESS_OP  reduce 113
-	GREAT_OR_EQUAL_OP  reduce 113
-	LESS_OR_EQUAL_OP  reduce 113
-	EQUALITY_OP  reduce 113
-	NOT_EQUALITY_OP  reduce 113
-	RP  reduce 113
-	SEMICOLON  reduce 113
-	PLUS_OP  reduce 113
-	MINUS_OP  reduce 113
-	DIV_OP  reduce 113
-	MULT_OP  reduce 113
-	MODULO_OP  reduce 113
+	AND_OP  reduce 112
+	OR_OP  reduce 112
+	GREATER_OP  reduce 112
+	LESS_OP  reduce 112
+	GREAT_OR_EQUAL_OP  reduce 112
+	LESS_OR_EQUAL_OP  reduce 112
+	EQUALITY_OP  reduce 112
+	NOT_EQUALITY_OP  reduce 112
+	RP  reduce 112
+	SEMICOLON  reduce 112
+	PLUS_OP  reduce 112
+	MINUS_OP  reduce 112
+	DIV_OP  reduce 112
+	MULT_OP  reduce 112
+	MODULO_OP  reduce 112
 
 
 state 94
-	power : factor .  (118)
+	power : factor .  (117)
 
-	.  reduce 118
+	.  reduce 117
 
 
 state 95
-	get_timestamp : TIMESTAMP_PF LP . RP  (140)
+	get_timestamp : TIMESTAMP_PF LP . RP  (139)
 
 	RP  shift 152
 	.  error
 
 
 state 96
-	get_temperature : TEMPERATURE_PF LP . RP  (141)
+	get_temperature : TEMPERATURE_PF LP . RP  (140)
 
 	RP  shift 153
 	.  error
 
 
 state 97
-	get_humidity : HUMIDITY_PF LP . RP  (142)
+	get_humidity : HUMIDITY_PF LP . RP  (141)
 
 	RP  shift 154
 	.  error
 
 
 state 98
-	get_air_pressure : AIR_PRESSURE_PF LP . RP  (143)
+	get_air_pressure : AIR_PRESSURE_PF LP . RP  (142)
 
 	RP  shift 155
 	.  error
 
 
 state 99
-	get_air_quality : AIR_QUALITY_PF LP . RP  (144)
+	get_air_quality : AIR_QUALITY_PF LP . RP  (143)
 
 	RP  shift 156
 	.  error
 
 
 state 100
-	get_light : LIGHT_PF LP . RP  (145)
+	get_light : LIGHT_PF LP . RP  (144)
 
 	RP  shift 157
 	.  error
 
 
 state 101
-	get_sound_level : SOUND_LEVEL_PF LP . frequency RP  (146)
+	get_sound_level : SOUND_LEVEL_PF LP . frequency RP  (145)
 
 	DOUBLE  shift 158
 	IDENTIFIER  shift 159
@@ -1268,19 +1240,19 @@ state 101
 
 
 state 102
-	increment_operation : INCREMENT_OP IDENTIFIER .  (30)
+	increment_operation : INCREMENT_OP IDENTIFIER .  (29)
 
-	.  reduce 30
+	.  reduce 29
 
 
 state 103
-	decrement_operation : DECREMENT_OP IDENTIFIER .  (27)
+	decrement_operation : DECREMENT_OP IDENTIFIER .  (26)
 
-	.  reduce 27
+	.  reduce 26
 
 
 state 104
-	establish_connection : ESTABLISH_CONN_PF LP . str_stmt RP  (151)
+	establish_connection : ESTABLISH_CONN_PF LP . str_stmt RP  (150)
 
 	STRING  shift 124
 	IDENTIFIER  shift 161
@@ -1290,19 +1262,19 @@ state 104
 
 
 state 105
-	increment_operation : IDENTIFIER INCREMENT_OP .  (29)
+	increment_operation : IDENTIFIER INCREMENT_OP .  (28)
 
-	.  reduce 29
+	.  reduce 28
 
 
 state 106
-	decrement_operation : IDENTIFIER DECREMENT_OP .  (26)
+	decrement_operation : IDENTIFIER DECREMENT_OP .  (25)
 
-	.  reduce 26
+	.  reduce 25
 
 
 state 107
-	assignment_expr_no_sc : IDENTIFIER ASSIGN_OP . assignment_operand  (53)
+	assignment_expr_no_sc : IDENTIFIER ASSIGN_OP . assignment_operand  (52)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -1356,8 +1328,8 @@ state 107
 
 
 state 108
-	send : IDENTIFIER DOT . SEND_PF LP send_item RP  (147)
-	read : IDENTIFIER DOT . READ_PF LP RP  (149)
+	send : IDENTIFIER DOT . SEND_PF LP send_item RP  (146)
+	read : IDENTIFIER DOT . READ_PF LP RP  (148)
 
 	SEND_PF  shift 169
 	READ_PF  shift 170
@@ -1381,30 +1353,30 @@ state 110
 
 
 state 111
-	decrement_expr : decrement_operation SEMICOLON .  (25)
+	decrement_expr : decrement_operation SEMICOLON .  (24)
 
-	.  reduce 25
+	.  reduce 24
 
 
 state 112
-	increment_expr : increment_operation SEMICOLON .  (28)
+	increment_expr : increment_operation SEMICOLON .  (27)
 
-	.  reduce 28
+	.  reduce 27
 
 
 state 113
-	fcn_call : fcn_name LP . param_list_no_type RP  (129)
-	param_list_no_type : .  (125)
+	fcn_call : fcn_name LP . param_list_no_type RP  (128)
+	param_list_no_type : .  (124)
 
 	IDENTIFIER  shift 172
-	RP  reduce 125
+	RP  reduce 124
 
 	param_list_no_type  goto 173
 
 
 state 114
-	declaration_expr : var_type IDENTIFIER . SEMICOLON  (50)
-	assignment_expr_no_sc : IDENTIFIER . ASSIGN_OP assignment_operand  (53)
+	declaration_expr : var_type IDENTIFIER . SEMICOLON  (49)
+	assignment_expr_no_sc : IDENTIFIER . ASSIGN_OP assignment_operand  (52)
 
 	SEMICOLON  shift 174
 	ASSIGN_OP  shift 107
@@ -1412,32 +1384,32 @@ state 114
 
 
 state 115
-	declaration_expr : var_type assignment_expr .  (51)
+	declaration_expr : var_type assignment_expr .  (50)
+
+	.  reduce 50
+
+
+state 116
+	assignment_expr : assignment_expr_no_sc SEMICOLON .  (51)
 
 	.  reduce 51
 
 
-state 116
-	assignment_expr : assignment_expr_no_sc SEMICOLON .  (52)
-
-	.  reduce 52
-
-
 state 117
-	fcn_call_expr : fcn_call SEMICOLON .  (111)
+	fcn_call_expr : fcn_call SEMICOLON .  (110)
+
+	.  reduce 110
+
+
+state 118
+	primitive_function_expr : primitive_functions SEMICOLON .  (111)
 
 	.  reduce 111
 
 
-state 118
-	primitive_function_expr : primitive_functions SEMICOLON .  (112)
-
-	.  reduce 112
-
-
 state 119
-	send : establish_connection DOT . SEND_PF LP send_item RP  (148)
-	read : establish_connection DOT . READ_PF LP RP  (150)
+	send : establish_connection DOT . SEND_PF LP send_item RP  (147)
+	read : establish_connection DOT . READ_PF LP RP  (149)
 
 	SEND_PF  shift 175
 	READ_PF  shift 176
@@ -1445,20 +1417,20 @@ state 119
 
 
 state 120
-	boolean_literal : TRUE_LITERAL .  (93)
+	boolean_literal : TRUE_LITERAL .  (92)
+
+	.  reduce 92
+
+
+state 121
+	boolean_literal : FALSE_LITERAL .  (93)
 
 	.  reduce 93
 
 
-state 121
-	boolean_literal : FALSE_LITERAL .  (94)
-
-	.  reduce 94
-
-
 state 122
-	boolean_no_math : NEGATION_OP . boolean_no_math  (63)
-	boolean_expr : NEGATION_OP . boolean_expr  (72)
+	boolean_no_math : NEGATION_OP . boolean_no_math  (62)
+	boolean_expr : NEGATION_OP . boolean_expr  (71)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -1506,14 +1478,14 @@ state 122
 
 
 state 123
-	boolean_no_math : LP . boolean_list OR_OP and_term RP  (64)
-	boolean_no_math : LP . and_term AND_OP boolean_factor RP  (65)
-	boolean_no_math : LP . boolean_literal RP  (66)
-	boolean_no_math : LP . NEGATION_OP boolean_expr RP  (67)
-	boolean_no_math : LP . num_compr_expr RP  (68)
-	boolean_no_math : LP . string_compr_expr RP  (69)
-	boolean_no_math : LP . boolean_no_math RP  (70)
-	factor : LP . math_stmt RP  (124)
+	boolean_no_math : LP . boolean_list OR_OP and_term RP  (63)
+	boolean_no_math : LP . and_term AND_OP boolean_factor RP  (64)
+	boolean_no_math : LP . boolean_literal RP  (65)
+	boolean_no_math : LP . NEGATION_OP boolean_expr RP  (66)
+	boolean_no_math : LP . num_compr_expr RP  (67)
+	boolean_no_math : LP . string_compr_expr RP  (68)
+	boolean_no_math : LP . boolean_no_math RP  (69)
+	factor : LP . math_stmt RP  (123)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -1564,54 +1536,53 @@ state 123
 
 
 state 124
-	str_stmt : STRING .  (99)
-	str_stmt : STRING . CONCAT_OP str_stmt  (101)
+	str_stmt : STRING .  (98)
+	str_stmt : STRING . CONCAT_OP str_stmt  (100)
 
 	CONCAT_OP  shift 187
-	AND_OP  reduce 99
-	OR_OP  reduce 99
-	RP  reduce 99
-	SEMICOLON  reduce 99
+	AND_OP  reduce 98
+	OR_OP  reduce 98
+	RP  reduce 98
+	SEMICOLON  reduce 98
+	STR_EQUALITY_OP  reduce 98
+	STR_NOT_EQUALITY_OP  reduce 98
+
+
+state 125
+	str_stmt : IDENTIFIER .  (99)
+	str_stmt : IDENTIFIER . CONCAT_OP str_stmt  (101)
+	factor : IDENTIFIER .  (120)
+	fcn_name : IDENTIFIER .  (127)
+	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (146)
+	read : IDENTIFIER . DOT READ_PF LP RP  (148)
+
+	DOT  shift 108
+	CONCAT_OP  shift 188
+	AND_OP  reduce 120
+	OR_OP  reduce 120
+	GREATER_OP  reduce 120
+	LESS_OP  reduce 120
+	GREAT_OR_EQUAL_OP  reduce 120
+	LESS_OR_EQUAL_OP  reduce 120
+	EQUALITY_OP  reduce 120
+	NOT_EQUALITY_OP  reduce 120
+	LP  reduce 127
+	RP  reduce 120
+	SEMICOLON  reduce 120
+	PLUS_OP  reduce 120
+	MINUS_OP  reduce 120
+	DIV_OP  reduce 120
+	MULT_OP  reduce 120
+	POWER_OP  reduce 120
+	MODULO_OP  reduce 120
 	STR_EQUALITY_OP  reduce 99
 	STR_NOT_EQUALITY_OP  reduce 99
 
 
-state 125
-	str_stmt : IDENTIFIER .  (100)
-	str_stmt : IDENTIFIER . CONCAT_OP str_stmt  (102)
-	factor : IDENTIFIER .  (121)
-	fcn_name : IDENTIFIER .  (128)
-	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (147)
-	read : IDENTIFIER . DOT READ_PF LP RP  (149)
-
-	DOT  shift 108
-	CONCAT_OP  shift 188
-	AND_OP  reduce 121
-	OR_OP  reduce 121
-	GREATER_OP  reduce 121
-	LESS_OP  reduce 121
-	GREAT_OR_EQUAL_OP  reduce 121
-	LESS_OR_EQUAL_OP  reduce 121
-	EQUALITY_OP  reduce 121
-	NOT_EQUALITY_OP  reduce 121
-	LP  reduce 128
-	RP  reduce 121
-	SEMICOLON  reduce 121
-	PLUS_OP  reduce 121
-	MINUS_OP  reduce 121
-	DIV_OP  reduce 121
-	MULT_OP  reduce 121
-	POWER_OP  reduce 121
-	MODULO_OP  reduce 121
-	STR_EQUALITY_OP  reduce 100
-	STR_NOT_EQUALITY_OP  reduce 100
-
-
 state 126
-	matched : IF LP boolean_list . RP option_nl matched ELSE option_nl matched  (10)
-	unmatched : IF LP boolean_list . RP option_nl stmt  (12)
-	unmatched : IF LP boolean_list . RP option_nl matched ELSE option_nl unmatched  (13)
-	boolean_list : boolean_list . OR_OP and_term  (57)
+	if_stmt : IF LP boolean_list . RP option_nl LBRACE stmt_list RBRACE  (9)
+	if_else_stmt : IF LP boolean_list . RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE  (10)
+	boolean_list : boolean_list . OR_OP and_term  (56)
 
 	OR_OP  shift 189
 	RP  shift 190
@@ -1619,54 +1590,54 @@ state 126
 
 
 state 127
-	boolean_list : and_term .  (58)
-	and_term : and_term . AND_OP boolean_factor  (59)
+	boolean_list : and_term .  (57)
+	and_term : and_term . AND_OP boolean_factor  (58)
 
 	AND_OP  shift 191
-	OR_OP  reduce 58
-	RP  reduce 58
-	SEMICOLON  reduce 58
+	OR_OP  reduce 57
+	RP  reduce 57
+	SEMICOLON  reduce 57
 
 
 state 128
-	and_term : boolean_factor .  (60)
+	and_term : boolean_factor .  (59)
+
+	.  reduce 59
+
+
+state 129
+	boolean_factor : boolean_expr .  (60)
 
 	.  reduce 60
 
 
-state 129
-	boolean_factor : boolean_expr .  (61)
+state 130
+	boolean_factor : boolean_no_math .  (61)
 
 	.  reduce 61
 
 
-state 130
-	boolean_factor : boolean_no_math .  (62)
-
-	.  reduce 62
-
-
 state 131
-	boolean_expr : boolean_literal .  (71)
+	boolean_expr : boolean_literal .  (70)
 
-	.  reduce 71
+	.  reduce 70
 
 
 state 132
-	boolean_expr : num_compr_expr .  (73)
+	boolean_expr : num_compr_expr .  (72)
 
-	.  reduce 73
+	.  reduce 72
 
 
 state 133
-	boolean_expr : string_compr_expr .  (75)
+	boolean_expr : string_compr_expr .  (74)
 
-	.  reduce 75
+	.  reduce 74
 
 
 state 134
-	boolean_expr : num_comparable .  (74)
-	num_compr_expr : num_comparable . comparator_operator num_comparable  (76)
+	boolean_expr : num_comparable .  (73)
+	num_compr_expr : num_comparable . comparator_operator num_comparable  (75)
 
 	GREATER_OP  shift 192
 	LESS_OP  shift 193
@@ -1674,16 +1645,16 @@ state 134
 	LESS_OR_EQUAL_OP  shift 195
 	EQUALITY_OP  shift 196
 	NOT_EQUALITY_OP  shift 197
-	AND_OP  reduce 74
-	OR_OP  reduce 74
-	RP  reduce 74
-	SEMICOLON  reduce 74
+	AND_OP  reduce 73
+	OR_OP  reduce 73
+	RP  reduce 73
+	SEMICOLON  reduce 73
 
 	comparator_operator  goto 198
 
 
 state 135
-	string_compr_expr : str_stmt . equal_or_not_operator str_stmt  (77)
+	string_compr_expr : str_stmt . equal_or_not_operator str_stmt  (76)
 
 	STR_EQUALITY_OP  shift 199
 	STR_NOT_EQUALITY_OP  shift 200
@@ -1693,7 +1664,7 @@ state 135
 
 
 state 136
-	for_loop : FOR option_nl LP . for_expr RP option_nl LBRACE stmt_list RBRACE  (42)
+	for_loop : FOR option_nl LP . for_expr RP option_nl LBRACE stmt_list RBRACE  (41)
 
 	BOOLEAN_TYPE  shift 18
 	INT_TYPE  shift 19
@@ -1712,7 +1683,7 @@ state 136
 
 
 state 137
-	while_loop : WHILE option_nl LP . boolean_list RP option_nl LBRACE stmt_list RBRACE  (40)
+	while_loop : WHILE option_nl LP . boolean_list RP option_nl LBRACE stmt_list RBRACE  (39)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -1763,7 +1734,7 @@ state 137
 
 
 state 138
-	do_while_loop : DO option_nl LBRACE . stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (41)
+	do_while_loop : DO option_nl LBRACE . stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (40)
 
 	error  shift 11
 	IF  shift 12
@@ -1796,9 +1767,9 @@ state 138
 
 	stmt_list  goto 208
 	stmt  goto 39
-	matched  goto 40
-	unmatched  goto 41
-	non_if_stmt  goto 42
+	conditional  goto 40
+	if_stmt  goto 41
+	if_else_stmt  goto 42
 	decrement_expr  goto 43
 	increment_expr  goto 44
 	declaration_expr  goto 45
@@ -1831,48 +1802,48 @@ state 138
 
 
 state 139
-	fcn_name : IDENTIFIER .  (128)
+	fcn_name : IDENTIFIER .  (127)
 
-	.  reduce 128
+	.  reduce 127
 
 
 state 140
-	define_fcn : FUNCTION_DEF fcn_return_type fcn_name . LP param_list RP option_nl LBRACE stmt_list RBRACE  (31)
+	define_fcn : FUNCTION_DEF fcn_return_type fcn_name . LP param_list RP option_nl LBRACE stmt_list RBRACE  (30)
 
 	LP  shift 209
 	.  error
 
 
 state 141
-	factor : IDENTIFIER .  (121)
-	fcn_name : IDENTIFIER .  (128)
-	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (147)
-	read : IDENTIFIER . DOT READ_PF LP RP  (149)
+	factor : IDENTIFIER .  (120)
+	fcn_name : IDENTIFIER .  (127)
+	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (146)
+	read : IDENTIFIER . DOT READ_PF LP RP  (148)
 
 	DOT  shift 108
-	AND_OP  reduce 121
-	OR_OP  reduce 121
-	GREATER_OP  reduce 121
-	LESS_OP  reduce 121
-	GREAT_OR_EQUAL_OP  reduce 121
-	LESS_OR_EQUAL_OP  reduce 121
-	EQUALITY_OP  reduce 121
-	NOT_EQUALITY_OP  reduce 121
-	LP  reduce 128
-	RP  reduce 121
-	SEMICOLON  reduce 121
-	PLUS_OP  reduce 121
-	MINUS_OP  reduce 121
-	DIV_OP  reduce 121
-	MULT_OP  reduce 121
-	POWER_OP  reduce 121
-	MODULO_OP  reduce 121
+	AND_OP  reduce 120
+	OR_OP  reduce 120
+	GREATER_OP  reduce 120
+	LESS_OP  reduce 120
+	GREAT_OR_EQUAL_OP  reduce 120
+	LESS_OR_EQUAL_OP  reduce 120
+	EQUALITY_OP  reduce 120
+	NOT_EQUALITY_OP  reduce 120
+	LP  reduce 127
+	RP  reduce 120
+	SEMICOLON  reduce 120
+	PLUS_OP  reduce 120
+	MINUS_OP  reduce 120
+	DIV_OP  reduce 120
+	MULT_OP  reduce 120
+	POWER_OP  reduce 120
+	MODULO_OP  reduce 120
 
 
 state 142
-	math_stmt : math_stmt . PLUS_OP term  (108)
-	math_stmt : math_stmt . MINUS_OP term  (109)
-	factor : LP math_stmt . RP  (124)
+	math_stmt : math_stmt . PLUS_OP term  (107)
+	math_stmt : math_stmt . MINUS_OP term  (108)
+	factor : LP math_stmt . RP  (123)
 
 	RP  shift 210
 	PLUS_OP  shift 145
@@ -1881,7 +1852,7 @@ state 142
 
 
 state 143
-	str_stmt_return : STRING CONCAT_OP . str_stmt  (104)
+	str_stmt_return : STRING CONCAT_OP . str_stmt  (103)
 
 	STRING  shift 124
 	IDENTIFIER  shift 161
@@ -1891,7 +1862,7 @@ state 143
 
 
 state 144
-	str_stmt_return : IDENTIFIER CONCAT_OP . str_stmt  (105)
+	str_stmt_return : IDENTIFIER CONCAT_OP . str_stmt  (104)
 
 	STRING  shift 124
 	IDENTIFIER  shift 161
@@ -1901,7 +1872,7 @@ state 144
 
 
 state 145
-	math_stmt : math_stmt PLUS_OP . term  (108)
+	math_stmt : math_stmt PLUS_OP . term  (107)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -1936,7 +1907,7 @@ state 145
 
 
 state 146
-	math_stmt : math_stmt MINUS_OP . term  (109)
+	math_stmt : math_stmt MINUS_OP . term  (108)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -1971,13 +1942,13 @@ state 146
 
 
 state 147
-	return_expr : RETURN return_stmt SEMICOLON .  (95)
+	return_expr : RETURN return_stmt SEMICOLON .  (94)
 
-	.  reduce 95
+	.  reduce 94
 
 
 state 148
-	term : term DIV_OP . power  (115)
+	term : term DIV_OP . power  (114)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -2011,7 +1982,7 @@ state 148
 
 
 state 149
-	term : term MULT_OP . power  (114)
+	term : term MULT_OP . power  (113)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -2045,7 +2016,7 @@ state 149
 
 
 state 150
-	term : term MODULO_OP . power  (116)
+	term : term MODULO_OP . power  (115)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -2079,7 +2050,7 @@ state 150
 
 
 state 151
-	power : power POWER_OP . factor  (117)
+	power : power POWER_OP . factor  (116)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -2112,161 +2083,161 @@ state 151
 
 
 state 152
-	get_timestamp : TIMESTAMP_PF LP RP .  (140)
+	get_timestamp : TIMESTAMP_PF LP RP .  (139)
+
+	.  reduce 139
+
+
+state 153
+	get_temperature : TEMPERATURE_PF LP RP .  (140)
 
 	.  reduce 140
 
 
-state 153
-	get_temperature : TEMPERATURE_PF LP RP .  (141)
+state 154
+	get_humidity : HUMIDITY_PF LP RP .  (141)
 
 	.  reduce 141
 
 
-state 154
-	get_humidity : HUMIDITY_PF LP RP .  (142)
+state 155
+	get_air_pressure : AIR_PRESSURE_PF LP RP .  (142)
 
 	.  reduce 142
 
 
-state 155
-	get_air_pressure : AIR_PRESSURE_PF LP RP .  (143)
+state 156
+	get_air_quality : AIR_QUALITY_PF LP RP .  (143)
 
 	.  reduce 143
 
 
-state 156
-	get_air_quality : AIR_QUALITY_PF LP RP .  (144)
+state 157
+	get_light : LIGHT_PF LP RP .  (144)
 
 	.  reduce 144
 
 
-state 157
-	get_light : LIGHT_PF LP RP .  (145)
-
-	.  reduce 145
-
-
 state 158
-	frequency : DOUBLE .  (155)
-
-	.  reduce 155
-
-
-state 159
-	frequency : IDENTIFIER .  (154)
+	frequency : DOUBLE .  (154)
 
 	.  reduce 154
 
 
+state 159
+	frequency : IDENTIFIER .  (153)
+
+	.  reduce 153
+
+
 state 160
-	get_sound_level : SOUND_LEVEL_PF LP frequency . RP  (146)
+	get_sound_level : SOUND_LEVEL_PF LP frequency . RP  (145)
 
 	RP  shift 219
 	.  error
 
 
 state 161
-	str_stmt : IDENTIFIER .  (100)
-	str_stmt : IDENTIFIER . CONCAT_OP str_stmt  (102)
+	str_stmt : IDENTIFIER .  (99)
+	str_stmt : IDENTIFIER . CONCAT_OP str_stmt  (101)
 
 	CONCAT_OP  shift 188
-	AND_OP  reduce 100
-	OR_OP  reduce 100
-	RP  reduce 100
-	SEMICOLON  reduce 100
-	STR_EQUALITY_OP  reduce 100
-	STR_NOT_EQUALITY_OP  reduce 100
+	AND_OP  reduce 99
+	OR_OP  reduce 99
+	RP  reduce 99
+	SEMICOLON  reduce 99
+	STR_EQUALITY_OP  reduce 99
+	STR_NOT_EQUALITY_OP  reduce 99
 
 
 state 162
-	establish_connection : ESTABLISH_CONN_PF LP str_stmt . RP  (151)
+	establish_connection : ESTABLISH_CONN_PF LP str_stmt . RP  (150)
 
 	RP  shift 220
 	.  error
 
 
 state 163
-	assignment_operand : SWITCH_IDENTIFIER .  (55)
-
-	.  reduce 55
-
-
-state 164
-	str_stmt : STRING .  (99)
-	str_stmt : STRING . CONCAT_OP str_stmt  (101)
-	str_stmt_return : STRING .  (103)
-	str_stmt_return : STRING . CONCAT_OP str_stmt  (104)
-
-	CONCAT_OP  shift 221
-	RP  reduce 103
-	SEMICOLON  reduce 103
-	STR_EQUALITY_OP  reduce 99
-	STR_NOT_EQUALITY_OP  reduce 99
-
-
-state 165
-	str_stmt : IDENTIFIER .  (100)
-	str_stmt : IDENTIFIER . CONCAT_OP str_stmt  (102)
-	str_stmt_return : IDENTIFIER . CONCAT_OP str_stmt  (105)
-	factor : IDENTIFIER .  (121)
-	fcn_name : IDENTIFIER .  (128)
-	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (147)
-	read : IDENTIFIER . DOT READ_PF LP RP  (149)
-
-	DOT  shift 108
-	CONCAT_OP  shift 222
-	AND_OP  reduce 121
-	OR_OP  reduce 121
-	GREATER_OP  reduce 121
-	LESS_OP  reduce 121
-	GREAT_OR_EQUAL_OP  reduce 121
-	LESS_OR_EQUAL_OP  reduce 121
-	EQUALITY_OP  reduce 121
-	NOT_EQUALITY_OP  reduce 121
-	LP  reduce 128
-	RP  reduce 121
-	SEMICOLON  reduce 121
-	PLUS_OP  reduce 121
-	MINUS_OP  reduce 121
-	DIV_OP  reduce 121
-	MULT_OP  reduce 121
-	POWER_OP  reduce 121
-	MODULO_OP  reduce 121
-	STR_EQUALITY_OP  reduce 100
-	STR_NOT_EQUALITY_OP  reduce 100
-
-
-state 166
-	assignment_operand : boolean_list .  (56)
-	boolean_list : boolean_list . OR_OP and_term  (57)
-
-	OR_OP  shift 189
-	RP  reduce 56
-	SEMICOLON  reduce 56
-
-
-state 167
-	assignment_expr_no_sc : IDENTIFIER ASSIGN_OP assignment_operand .  (53)
-
-	.  reduce 53
-
-
-state 168
-	assignment_operand : str_stmt_return .  (54)
+	assignment_operand : SWITCH_IDENTIFIER .  (54)
 
 	.  reduce 54
 
 
+state 164
+	str_stmt : STRING .  (98)
+	str_stmt : STRING . CONCAT_OP str_stmt  (100)
+	str_stmt_return : STRING .  (102)
+	str_stmt_return : STRING . CONCAT_OP str_stmt  (103)
+
+	CONCAT_OP  shift 221
+	RP  reduce 102
+	SEMICOLON  reduce 102
+	STR_EQUALITY_OP  reduce 98
+	STR_NOT_EQUALITY_OP  reduce 98
+
+
+state 165
+	str_stmt : IDENTIFIER .  (99)
+	str_stmt : IDENTIFIER . CONCAT_OP str_stmt  (101)
+	str_stmt_return : IDENTIFIER . CONCAT_OP str_stmt  (104)
+	factor : IDENTIFIER .  (120)
+	fcn_name : IDENTIFIER .  (127)
+	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (146)
+	read : IDENTIFIER . DOT READ_PF LP RP  (148)
+
+	DOT  shift 108
+	CONCAT_OP  shift 222
+	AND_OP  reduce 120
+	OR_OP  reduce 120
+	GREATER_OP  reduce 120
+	LESS_OP  reduce 120
+	GREAT_OR_EQUAL_OP  reduce 120
+	LESS_OR_EQUAL_OP  reduce 120
+	EQUALITY_OP  reduce 120
+	NOT_EQUALITY_OP  reduce 120
+	LP  reduce 127
+	RP  reduce 120
+	SEMICOLON  reduce 120
+	PLUS_OP  reduce 120
+	MINUS_OP  reduce 120
+	DIV_OP  reduce 120
+	MULT_OP  reduce 120
+	POWER_OP  reduce 120
+	MODULO_OP  reduce 120
+	STR_EQUALITY_OP  reduce 99
+	STR_NOT_EQUALITY_OP  reduce 99
+
+
+state 166
+	assignment_operand : boolean_list .  (55)
+	boolean_list : boolean_list . OR_OP and_term  (56)
+
+	OR_OP  shift 189
+	RP  reduce 55
+	SEMICOLON  reduce 55
+
+
+state 167
+	assignment_expr_no_sc : IDENTIFIER ASSIGN_OP assignment_operand .  (52)
+
+	.  reduce 52
+
+
+state 168
+	assignment_operand : str_stmt_return .  (53)
+
+	.  reduce 53
+
+
 state 169
-	send : IDENTIFIER DOT SEND_PF . LP send_item RP  (147)
+	send : IDENTIFIER DOT SEND_PF . LP send_item RP  (146)
 
 	LP  shift 223
 	.  error
 
 
 state 170
-	read : IDENTIFIER DOT READ_PF . LP RP  (149)
+	read : IDENTIFIER DOT READ_PF . LP RP  (148)
 
 	LP  shift 224
 	.  error
@@ -2279,56 +2250,56 @@ state 171
 
 
 state 172
-	param_list_no_type : IDENTIFIER .  (126)
-	param_list_no_type : IDENTIFIER . COMMA param_list_no_type  (127)
+	param_list_no_type : IDENTIFIER .  (125)
+	param_list_no_type : IDENTIFIER . COMMA param_list_no_type  (126)
 
 	COMMA  shift 225
-	RP  reduce 126
+	RP  reduce 125
 
 
 state 173
-	fcn_call : fcn_name LP param_list_no_type . RP  (129)
+	fcn_call : fcn_name LP param_list_no_type . RP  (128)
 
 	RP  shift 226
 	.  error
 
 
 state 174
-	declaration_expr : var_type IDENTIFIER SEMICOLON .  (50)
+	declaration_expr : var_type IDENTIFIER SEMICOLON .  (49)
 
-	.  reduce 50
+	.  reduce 49
 
 
 state 175
-	send : establish_connection DOT SEND_PF . LP send_item RP  (148)
+	send : establish_connection DOT SEND_PF . LP send_item RP  (147)
 
 	LP  shift 227
 	.  error
 
 
 state 176
-	read : establish_connection DOT READ_PF . LP RP  (150)
+	read : establish_connection DOT READ_PF . LP RP  (149)
 
 	LP  shift 228
 	.  error
 
 
 state 177
-	boolean_expr : NEGATION_OP boolean_expr .  (72)
+	boolean_expr : NEGATION_OP boolean_expr .  (71)
 
-	.  reduce 72
+	.  reduce 71
 
 
 state 178
-	boolean_no_math : NEGATION_OP boolean_no_math .  (63)
+	boolean_no_math : NEGATION_OP boolean_no_math .  (62)
 
-	.  reduce 63
+	.  reduce 62
 
 
 state 179
-	boolean_no_math : NEGATION_OP . boolean_no_math  (63)
-	boolean_no_math : LP NEGATION_OP . boolean_expr RP  (67)
-	boolean_expr : NEGATION_OP . boolean_expr  (72)
+	boolean_no_math : NEGATION_OP . boolean_no_math  (62)
+	boolean_no_math : LP NEGATION_OP . boolean_expr RP  (66)
+	boolean_expr : NEGATION_OP . boolean_expr  (71)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -2376,79 +2347,79 @@ state 179
 
 
 state 180
-	boolean_list : boolean_list . OR_OP and_term  (57)
-	boolean_no_math : LP boolean_list . OR_OP and_term RP  (64)
+	boolean_list : boolean_list . OR_OP and_term  (56)
+	boolean_no_math : LP boolean_list . OR_OP and_term RP  (63)
 
 	OR_OP  shift 230
 	.  error
 
 
 state 181
-	num_comparable : math_stmt .  (107)
-	math_stmt : math_stmt . PLUS_OP term  (108)
-	math_stmt : math_stmt . MINUS_OP term  (109)
-	factor : LP math_stmt . RP  (124)
+	num_comparable : math_stmt .  (106)
+	math_stmt : math_stmt . PLUS_OP term  (107)
+	math_stmt : math_stmt . MINUS_OP term  (108)
+	factor : LP math_stmt . RP  (123)
 
 	RP  shift 210
 	PLUS_OP  shift 145
 	MINUS_OP  shift 146
-	AND_OP  reduce 107
-	OR_OP  reduce 107
-	GREATER_OP  reduce 107
-	LESS_OP  reduce 107
-	GREAT_OR_EQUAL_OP  reduce 107
-	LESS_OR_EQUAL_OP  reduce 107
-	EQUALITY_OP  reduce 107
-	NOT_EQUALITY_OP  reduce 107
+	AND_OP  reduce 106
+	OR_OP  reduce 106
+	GREATER_OP  reduce 106
+	LESS_OP  reduce 106
+	GREAT_OR_EQUAL_OP  reduce 106
+	LESS_OR_EQUAL_OP  reduce 106
+	EQUALITY_OP  reduce 106
+	NOT_EQUALITY_OP  reduce 106
 
 
 state 182
-	boolean_list : and_term .  (58)
-	and_term : and_term . AND_OP boolean_factor  (59)
-	boolean_no_math : LP and_term . AND_OP boolean_factor RP  (65)
+	boolean_list : and_term .  (57)
+	and_term : and_term . AND_OP boolean_factor  (58)
+	boolean_no_math : LP and_term . AND_OP boolean_factor RP  (64)
 
 	AND_OP  shift 231
-	OR_OP  reduce 58
+	OR_OP  reduce 57
 
 
 state 183
-	boolean_factor : boolean_no_math .  (62)
-	boolean_no_math : LP boolean_no_math . RP  (70)
+	boolean_factor : boolean_no_math .  (61)
+	boolean_no_math : LP boolean_no_math . RP  (69)
 
 	RP  shift 232
-	AND_OP  reduce 62
-	OR_OP  reduce 62
+	AND_OP  reduce 61
+	OR_OP  reduce 61
 
 
 state 184
-	boolean_no_math : LP boolean_literal . RP  (66)
-	boolean_expr : boolean_literal .  (71)
+	boolean_no_math : LP boolean_literal . RP  (65)
+	boolean_expr : boolean_literal .  (70)
 
 	RP  shift 233
-	AND_OP  reduce 71
-	OR_OP  reduce 71
+	AND_OP  reduce 70
+	OR_OP  reduce 70
 
 
 state 185
-	boolean_no_math : LP num_compr_expr . RP  (68)
-	boolean_expr : num_compr_expr .  (73)
+	boolean_no_math : LP num_compr_expr . RP  (67)
+	boolean_expr : num_compr_expr .  (72)
 
 	RP  shift 234
-	AND_OP  reduce 73
-	OR_OP  reduce 73
+	AND_OP  reduce 72
+	OR_OP  reduce 72
 
 
 state 186
-	boolean_no_math : LP string_compr_expr . RP  (69)
-	boolean_expr : string_compr_expr .  (75)
+	boolean_no_math : LP string_compr_expr . RP  (68)
+	boolean_expr : string_compr_expr .  (74)
 
 	RP  shift 235
-	AND_OP  reduce 75
-	OR_OP  reduce 75
+	AND_OP  reduce 74
+	OR_OP  reduce 74
 
 
 state 187
-	str_stmt : STRING CONCAT_OP . str_stmt  (101)
+	str_stmt : STRING CONCAT_OP . str_stmt  (100)
 
 	STRING  shift 124
 	IDENTIFIER  shift 161
@@ -2458,7 +2429,7 @@ state 187
 
 
 state 188
-	str_stmt : IDENTIFIER CONCAT_OP . str_stmt  (102)
+	str_stmt : IDENTIFIER CONCAT_OP . str_stmt  (101)
 
 	STRING  shift 124
 	IDENTIFIER  shift 161
@@ -2468,7 +2439,7 @@ state 188
 
 
 state 189
-	boolean_list : boolean_list OR_OP . and_term  (57)
+	boolean_list : boolean_list OR_OP . and_term  (56)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -2517,46 +2488,19 @@ state 189
 	establish_connection  goto 71
 
 
-190: shift/reduce conflict (shift 7, reduce 3) on NL
 state 190
-	matched : IF LP boolean_list RP . option_nl matched ELSE option_nl matched  (10)
-	unmatched : IF LP boolean_list RP . option_nl stmt  (12)
-	unmatched : IF LP boolean_list RP . option_nl matched ELSE option_nl unmatched  (13)
+	if_stmt : IF LP boolean_list RP . option_nl LBRACE stmt_list RBRACE  (9)
+	if_else_stmt : IF LP boolean_list RP . option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE  (10)
 	option_nl : .  (3)
 
 	NL  shift 7
-	error  reduce 3
-	IF  reduce 3
-	FOR  reduce 3
-	WHILE  reduce 3
-	DO  reduce 3
-	FUNCTION_DEF  reduce 3
-	RETURN  reduce 3
-	BOOLEAN_TYPE  reduce 3
-	INT_TYPE  reduce 3
-	STRING_TYPE  reduce 3
-	CHAR_TYPE  reduce 3
-	CONNECTION_TYPE  reduce 3
-	TIMESTAMP_TYPE  reduce 3
-	DOUBLE_TYPE  reduce 3
-	TIMESTAMP_PF  reduce 3
-	TEMPERATURE_PF  reduce 3
-	HUMIDITY_PF  reduce 3
-	AIR_PRESSURE_PF  reduce 3
-	AIR_QUALITY_PF  reduce 3
-	LIGHT_PF  reduce 3
-	SOUND_LEVEL_PF  reduce 3
-	SINGLE_LINE_COMMENT  reduce 3
-	INCREMENT_OP  reduce 3
-	DECREMENT_OP  reduce 3
-	ESTABLISH_CONN_PF  reduce 3
-	IDENTIFIER  reduce 3
+	LBRACE  reduce 3
 
 	option_nl  goto 239
 
 
 state 191
-	and_term : and_term AND_OP . boolean_factor  (59)
+	and_term : and_term AND_OP . boolean_factor  (58)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -2605,43 +2549,43 @@ state 191
 
 
 state 192
-	comparator_operator : GREATER_OP .  (78)
+	comparator_operator : GREATER_OP .  (77)
+
+	.  reduce 77
+
+
+state 193
+	comparator_operator : LESS_OP .  (78)
 
 	.  reduce 78
 
 
-state 193
-	comparator_operator : LESS_OP .  (79)
+state 194
+	comparator_operator : GREAT_OR_EQUAL_OP .  (79)
 
 	.  reduce 79
 
 
-state 194
-	comparator_operator : GREAT_OR_EQUAL_OP .  (80)
+state 195
+	comparator_operator : LESS_OR_EQUAL_OP .  (80)
 
 	.  reduce 80
 
 
-state 195
-	comparator_operator : LESS_OR_EQUAL_OP .  (81)
+state 196
+	comparator_operator : EQUALITY_OP .  (81)
 
 	.  reduce 81
 
 
-state 196
-	comparator_operator : EQUALITY_OP .  (82)
+state 197
+	comparator_operator : NOT_EQUALITY_OP .  (82)
 
 	.  reduce 82
 
 
-state 197
-	comparator_operator : NOT_EQUALITY_OP .  (83)
-
-	.  reduce 83
-
-
 state 198
-	num_compr_expr : num_comparable comparator_operator . num_comparable  (76)
+	num_compr_expr : num_comparable comparator_operator . num_comparable  (75)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -2679,19 +2623,19 @@ state 198
 
 
 state 199
-	equal_or_not_operator : STR_EQUALITY_OP .  (84)
+	equal_or_not_operator : STR_EQUALITY_OP .  (83)
+
+	.  reduce 83
+
+
+state 200
+	equal_or_not_operator : STR_NOT_EQUALITY_OP .  (84)
 
 	.  reduce 84
 
 
-state 200
-	equal_or_not_operator : STR_NOT_EQUALITY_OP .  (85)
-
-	.  reduce 85
-
-
 state 201
-	string_compr_expr : str_stmt equal_or_not_operator . str_stmt  (77)
+	string_compr_expr : str_stmt equal_or_not_operator . str_stmt  (76)
 
 	STRING  shift 124
 	IDENTIFIER  shift 161
@@ -2701,14 +2645,14 @@ state 201
 
 
 state 202
-	assignment_expr_no_sc : IDENTIFIER . ASSIGN_OP assignment_operand  (53)
+	assignment_expr_no_sc : IDENTIFIER . ASSIGN_OP assignment_operand  (52)
 
 	ASSIGN_OP  shift 107
 	.  error
 
 
 state 203
-	for_init : var_type . assignment_expr_no_sc  (44)
+	for_init : var_type . assignment_expr_no_sc  (43)
 
 	IDENTIFIER  shift 202
 	.  error
@@ -2717,28 +2661,28 @@ state 203
 
 
 state 204
-	for_loop : FOR option_nl LP for_expr . RP option_nl LBRACE stmt_list RBRACE  (42)
+	for_loop : FOR option_nl LP for_expr . RP option_nl LBRACE stmt_list RBRACE  (41)
 
 	RP  shift 244
 	.  error
 
 
 state 205
-	for_expr : for_init . SEMICOLON boolean_list SEMICOLON for_update  (43)
+	for_expr : for_init . SEMICOLON boolean_list SEMICOLON for_update  (42)
 
 	SEMICOLON  shift 245
 	.  error
 
 
 state 206
-	for_init : assignment_expr_no_sc .  (45)
+	for_init : assignment_expr_no_sc .  (44)
 
-	.  reduce 45
+	.  reduce 44
 
 
 state 207
-	while_loop : WHILE option_nl LP boolean_list . RP option_nl LBRACE stmt_list RBRACE  (40)
-	boolean_list : boolean_list . OR_OP and_term  (57)
+	while_loop : WHILE option_nl LP boolean_list . RP option_nl LBRACE stmt_list RBRACE  (39)
+	boolean_list : boolean_list . OR_OP and_term  (56)
 
 	OR_OP  shift 189
 	RP  shift 246
@@ -2746,15 +2690,15 @@ state 207
 
 
 state 208
-	do_while_loop : DO option_nl LBRACE stmt_list . RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (41)
+	do_while_loop : DO option_nl LBRACE stmt_list . RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (40)
 
 	RBRACE  shift 247
 	.  error
 
 
 state 209
-	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP . param_list RP option_nl LBRACE stmt_list RBRACE  (31)
-	param_list : .  (32)
+	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP . param_list RP option_nl LBRACE stmt_list RBRACE  (30)
+	param_list : .  (31)
 
 	BOOLEAN_TYPE  shift 18
 	INT_TYPE  shift 19
@@ -2763,35 +2707,58 @@ state 209
 	CONNECTION_TYPE  shift 22
 	TIMESTAMP_TYPE  shift 23
 	DOUBLE_TYPE  shift 24
-	RP  reduce 32
+	RP  reduce 31
 
 	param_list  goto 248
 	var_type  goto 249
 
 
 state 210
-	factor : LP math_stmt RP .  (124)
+	factor : LP math_stmt RP .  (123)
 
-	.  reduce 124
+	.  reduce 123
 
 
 state 211
-	str_stmt_return : STRING CONCAT_OP str_stmt .  (104)
+	str_stmt_return : STRING CONCAT_OP str_stmt .  (103)
+
+	.  reduce 103
+
+
+state 212
+	str_stmt_return : IDENTIFIER CONCAT_OP str_stmt .  (104)
 
 	.  reduce 104
 
 
-state 212
-	str_stmt_return : IDENTIFIER CONCAT_OP str_stmt .  (105)
-
-	.  reduce 105
-
-
 state 213
-	math_stmt : math_stmt PLUS_OP term .  (108)
-	term : term . MULT_OP power  (114)
-	term : term . DIV_OP power  (115)
-	term : term . MODULO_OP power  (116)
+	math_stmt : math_stmt PLUS_OP term .  (107)
+	term : term . MULT_OP power  (113)
+	term : term . DIV_OP power  (114)
+	term : term . MODULO_OP power  (115)
+
+	DIV_OP  shift 148
+	MULT_OP  shift 149
+	MODULO_OP  shift 150
+	AND_OP  reduce 107
+	OR_OP  reduce 107
+	GREATER_OP  reduce 107
+	LESS_OP  reduce 107
+	GREAT_OR_EQUAL_OP  reduce 107
+	LESS_OR_EQUAL_OP  reduce 107
+	EQUALITY_OP  reduce 107
+	NOT_EQUALITY_OP  reduce 107
+	RP  reduce 107
+	SEMICOLON  reduce 107
+	PLUS_OP  reduce 107
+	MINUS_OP  reduce 107
+
+
+state 214
+	math_stmt : math_stmt MINUS_OP term .  (108)
+	term : term . MULT_OP power  (113)
+	term : term . DIV_OP power  (114)
+	term : term . MODULO_OP power  (115)
 
 	DIV_OP  shift 148
 	MULT_OP  shift 149
@@ -2810,54 +2777,9 @@ state 213
 	MINUS_OP  reduce 108
 
 
-state 214
-	math_stmt : math_stmt MINUS_OP term .  (109)
-	term : term . MULT_OP power  (114)
-	term : term . DIV_OP power  (115)
-	term : term . MODULO_OP power  (116)
-
-	DIV_OP  shift 148
-	MULT_OP  shift 149
-	MODULO_OP  shift 150
-	AND_OP  reduce 109
-	OR_OP  reduce 109
-	GREATER_OP  reduce 109
-	LESS_OP  reduce 109
-	GREAT_OR_EQUAL_OP  reduce 109
-	LESS_OR_EQUAL_OP  reduce 109
-	EQUALITY_OP  reduce 109
-	NOT_EQUALITY_OP  reduce 109
-	RP  reduce 109
-	SEMICOLON  reduce 109
-	PLUS_OP  reduce 109
-	MINUS_OP  reduce 109
-
-
 state 215
-	term : term DIV_OP power .  (115)
-	power : power . POWER_OP factor  (117)
-
-	POWER_OP  shift 151
-	AND_OP  reduce 115
-	OR_OP  reduce 115
-	GREATER_OP  reduce 115
-	LESS_OP  reduce 115
-	GREAT_OR_EQUAL_OP  reduce 115
-	LESS_OR_EQUAL_OP  reduce 115
-	EQUALITY_OP  reduce 115
-	NOT_EQUALITY_OP  reduce 115
-	RP  reduce 115
-	SEMICOLON  reduce 115
-	PLUS_OP  reduce 115
-	MINUS_OP  reduce 115
-	DIV_OP  reduce 115
-	MULT_OP  reduce 115
-	MODULO_OP  reduce 115
-
-
-state 216
-	term : term MULT_OP power .  (114)
-	power : power . POWER_OP factor  (117)
+	term : term DIV_OP power .  (114)
+	power : power . POWER_OP factor  (116)
 
 	POWER_OP  shift 151
 	AND_OP  reduce 114
@@ -2877,49 +2799,71 @@ state 216
 	MODULO_OP  reduce 114
 
 
-state 217
-	term : term MODULO_OP power .  (116)
-	power : power . POWER_OP factor  (117)
+state 216
+	term : term MULT_OP power .  (113)
+	power : power . POWER_OP factor  (116)
 
 	POWER_OP  shift 151
-	AND_OP  reduce 116
-	OR_OP  reduce 116
-	GREATER_OP  reduce 116
-	LESS_OP  reduce 116
-	GREAT_OR_EQUAL_OP  reduce 116
-	LESS_OR_EQUAL_OP  reduce 116
-	EQUALITY_OP  reduce 116
-	NOT_EQUALITY_OP  reduce 116
-	RP  reduce 116
-	SEMICOLON  reduce 116
-	PLUS_OP  reduce 116
-	MINUS_OP  reduce 116
-	DIV_OP  reduce 116
-	MULT_OP  reduce 116
-	MODULO_OP  reduce 116
+	AND_OP  reduce 113
+	OR_OP  reduce 113
+	GREATER_OP  reduce 113
+	LESS_OP  reduce 113
+	GREAT_OR_EQUAL_OP  reduce 113
+	LESS_OR_EQUAL_OP  reduce 113
+	EQUALITY_OP  reduce 113
+	NOT_EQUALITY_OP  reduce 113
+	RP  reduce 113
+	SEMICOLON  reduce 113
+	PLUS_OP  reduce 113
+	MINUS_OP  reduce 113
+	DIV_OP  reduce 113
+	MULT_OP  reduce 113
+	MODULO_OP  reduce 113
+
+
+state 217
+	term : term MODULO_OP power .  (115)
+	power : power . POWER_OP factor  (116)
+
+	POWER_OP  shift 151
+	AND_OP  reduce 115
+	OR_OP  reduce 115
+	GREATER_OP  reduce 115
+	LESS_OP  reduce 115
+	GREAT_OR_EQUAL_OP  reduce 115
+	LESS_OR_EQUAL_OP  reduce 115
+	EQUALITY_OP  reduce 115
+	NOT_EQUALITY_OP  reduce 115
+	RP  reduce 115
+	SEMICOLON  reduce 115
+	PLUS_OP  reduce 115
+	MINUS_OP  reduce 115
+	DIV_OP  reduce 115
+	MULT_OP  reduce 115
+	MODULO_OP  reduce 115
 
 
 state 218
-	power : power POWER_OP factor .  (117)
+	power : power POWER_OP factor .  (116)
 
-	.  reduce 117
+	.  reduce 116
 
 
 state 219
-	get_sound_level : SOUND_LEVEL_PF LP frequency RP .  (146)
+	get_sound_level : SOUND_LEVEL_PF LP frequency RP .  (145)
 
-	.  reduce 146
+	.  reduce 145
 
 
 state 220
-	establish_connection : ESTABLISH_CONN_PF LP str_stmt RP .  (151)
+	establish_connection : ESTABLISH_CONN_PF LP str_stmt RP .  (150)
 
-	.  reduce 151
+	.  reduce 150
 
 
 state 221
-	str_stmt : STRING CONCAT_OP . str_stmt  (101)
-	str_stmt_return : STRING CONCAT_OP . str_stmt  (104)
+	str_stmt : STRING CONCAT_OP . str_stmt  (100)
+	str_stmt_return : STRING CONCAT_OP . str_stmt  (103)
 
 	STRING  shift 124
 	IDENTIFIER  shift 161
@@ -2929,8 +2873,8 @@ state 221
 
 
 state 222
-	str_stmt : IDENTIFIER CONCAT_OP . str_stmt  (102)
-	str_stmt_return : IDENTIFIER CONCAT_OP . str_stmt  (105)
+	str_stmt : IDENTIFIER CONCAT_OP . str_stmt  (101)
+	str_stmt_return : IDENTIFIER CONCAT_OP . str_stmt  (104)
 
 	STRING  shift 124
 	IDENTIFIER  shift 161
@@ -2940,7 +2884,7 @@ state 222
 
 
 state 223
-	send : IDENTIFIER DOT SEND_PF LP . send_item RP  (147)
+	send : IDENTIFIER DOT SEND_PF LP . send_item RP  (146)
 
 	INTEGER  shift 252
 	IDENTIFIER  shift 253
@@ -2950,30 +2894,30 @@ state 223
 
 
 state 224
-	read : IDENTIFIER DOT READ_PF LP . RP  (149)
+	read : IDENTIFIER DOT READ_PF LP . RP  (148)
 
 	RP  shift 255
 	.  error
 
 
 state 225
-	param_list_no_type : IDENTIFIER COMMA . param_list_no_type  (127)
-	param_list_no_type : .  (125)
+	param_list_no_type : IDENTIFIER COMMA . param_list_no_type  (126)
+	param_list_no_type : .  (124)
 
 	IDENTIFIER  shift 172
-	RP  reduce 125
+	RP  reduce 124
 
 	param_list_no_type  goto 256
 
 
 state 226
-	fcn_call : fcn_name LP param_list_no_type RP .  (129)
+	fcn_call : fcn_name LP param_list_no_type RP .  (128)
 
-	.  reduce 129
+	.  reduce 128
 
 
 state 227
-	send : establish_connection DOT SEND_PF LP . send_item RP  (148)
+	send : establish_connection DOT SEND_PF LP . send_item RP  (147)
 
 	INTEGER  shift 252
 	IDENTIFIER  shift 253
@@ -2983,24 +2927,24 @@ state 227
 
 
 state 228
-	read : establish_connection DOT READ_PF LP . RP  (150)
+	read : establish_connection DOT READ_PF LP . RP  (149)
 
 	RP  shift 258
 	.  error
 
 
 state 229
-	boolean_no_math : LP NEGATION_OP boolean_expr . RP  (67)
-	boolean_expr : NEGATION_OP boolean_expr .  (72)
+	boolean_no_math : LP NEGATION_OP boolean_expr . RP  (66)
+	boolean_expr : NEGATION_OP boolean_expr .  (71)
 
 	RP  shift 259
-	AND_OP  reduce 72
-	OR_OP  reduce 72
+	AND_OP  reduce 71
+	OR_OP  reduce 71
 
 
 state 230
-	boolean_list : boolean_list OR_OP . and_term  (57)
-	boolean_no_math : LP boolean_list OR_OP . and_term RP  (64)
+	boolean_list : boolean_list OR_OP . and_term  (56)
+	boolean_no_math : LP boolean_list OR_OP . and_term RP  (63)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -3050,8 +2994,8 @@ state 230
 
 
 state 231
-	and_term : and_term AND_OP . boolean_factor  (59)
-	boolean_no_math : LP and_term AND_OP . boolean_factor RP  (65)
+	and_term : and_term AND_OP . boolean_factor  (58)
+	boolean_no_math : LP and_term AND_OP . boolean_factor RP  (64)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -3100,156 +3044,95 @@ state 231
 
 
 state 232
-	boolean_no_math : LP boolean_no_math RP .  (70)
-
-	.  reduce 70
-
-
-state 233
-	boolean_no_math : LP boolean_literal RP .  (66)
-
-	.  reduce 66
-
-
-state 234
-	boolean_no_math : LP num_compr_expr RP .  (68)
-
-	.  reduce 68
-
-
-state 235
-	boolean_no_math : LP string_compr_expr RP .  (69)
+	boolean_no_math : LP boolean_no_math RP .  (69)
 
 	.  reduce 69
 
 
+state 233
+	boolean_no_math : LP boolean_literal RP .  (65)
+
+	.  reduce 65
+
+
+state 234
+	boolean_no_math : LP num_compr_expr RP .  (67)
+
+	.  reduce 67
+
+
+state 235
+	boolean_no_math : LP string_compr_expr RP .  (68)
+
+	.  reduce 68
+
+
 state 236
-	str_stmt : STRING CONCAT_OP str_stmt .  (101)
+	str_stmt : STRING CONCAT_OP str_stmt .  (100)
+
+	.  reduce 100
+
+
+state 237
+	str_stmt : IDENTIFIER CONCAT_OP str_stmt .  (101)
 
 	.  reduce 101
 
 
-state 237
-	str_stmt : IDENTIFIER CONCAT_OP str_stmt .  (102)
-
-	.  reduce 102
-
-
 state 238
-	boolean_list : boolean_list OR_OP and_term .  (57)
-	and_term : and_term . AND_OP boolean_factor  (59)
+	boolean_list : boolean_list OR_OP and_term .  (56)
+	and_term : and_term . AND_OP boolean_factor  (58)
 
 	AND_OP  shift 191
-	OR_OP  reduce 57
-	RP  reduce 57
-	SEMICOLON  reduce 57
+	OR_OP  reduce 56
+	RP  reduce 56
+	SEMICOLON  reduce 56
 
 
 state 239
-	matched : IF LP boolean_list RP option_nl . matched ELSE option_nl matched  (10)
-	unmatched : IF LP boolean_list RP option_nl . stmt  (12)
-	unmatched : IF LP boolean_list RP option_nl . matched ELSE option_nl unmatched  (13)
+	if_stmt : IF LP boolean_list RP option_nl . LBRACE stmt_list RBRACE  (9)
+	if_else_stmt : IF LP boolean_list RP option_nl . LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE  (10)
 
-	error  shift 11
-	IF  shift 12
-	FOR  shift 13
-	WHILE  shift 14
-	DO  shift 15
-	FUNCTION_DEF  shift 16
-	RETURN  shift 17
-	BOOLEAN_TYPE  shift 18
-	INT_TYPE  shift 19
-	STRING_TYPE  shift 20
-	CHAR_TYPE  shift 21
-	CONNECTION_TYPE  shift 22
-	TIMESTAMP_TYPE  shift 23
-	DOUBLE_TYPE  shift 24
-	TIMESTAMP_PF  shift 25
-	TEMPERATURE_PF  shift 26
-	HUMIDITY_PF  shift 27
-	AIR_PRESSURE_PF  shift 28
-	AIR_QUALITY_PF  shift 29
-	LIGHT_PF  shift 30
-	SOUND_LEVEL_PF  shift 31
-	NL  shift 32
-	SINGLE_LINE_COMMENT  shift 33
-	INCREMENT_OP  shift 34
-	DECREMENT_OP  shift 35
-	ESTABLISH_CONN_PF  shift 36
-	IDENTIFIER  shift 37
+	LBRACE  shift 262
 	.  error
-
-	stmt  goto 262
-	matched  goto 263
-	unmatched  goto 41
-	non_if_stmt  goto 42
-	decrement_expr  goto 43
-	increment_expr  goto 44
-	declaration_expr  goto 45
-	return_expr  goto 46
-	assignment_expr  goto 47
-	loop_expr  goto 48
-	define_fcn  goto 49
-	fcn_call_expr  goto 50
-	primitive_function_expr  goto 51
-	decrement_operation  goto 52
-	increment_operation  goto 53
-	fcn_name  goto 54
-	var_type  goto 55
-	while_loop  goto 56
-	do_while_loop  goto 57
-	for_loop  goto 58
-	assignment_expr_no_sc  goto 59
-	fcn_call  goto 60
-	primitive_functions  goto 61
-	get_timestamp  goto 62
-	get_temperature  goto 63
-	get_humidity  goto 64
-	get_air_pressure  goto 65
-	get_air_quality  goto 66
-	get_light  goto 67
-	get_sound_level  goto 68
-	send  goto 69
-	read  goto 70
-	establish_connection  goto 71
 
 
 state 240
-	and_term : and_term AND_OP boolean_factor .  (59)
+	and_term : and_term AND_OP boolean_factor .  (58)
 
-	.  reduce 59
+	.  reduce 58
 
 
 state 241
-	num_compr_expr : num_comparable comparator_operator num_comparable .  (76)
+	num_compr_expr : num_comparable comparator_operator num_comparable .  (75)
+
+	.  reduce 75
+
+
+state 242
+	string_compr_expr : str_stmt equal_or_not_operator str_stmt .  (76)
 
 	.  reduce 76
 
 
-state 242
-	string_compr_expr : str_stmt equal_or_not_operator str_stmt .  (77)
-
-	.  reduce 77
-
-
 state 243
-	for_init : var_type assignment_expr_no_sc .  (44)
+	for_init : var_type assignment_expr_no_sc .  (43)
 
-	.  reduce 44
+	.  reduce 43
 
 
 state 244
-	for_loop : FOR option_nl LP for_expr RP . option_nl LBRACE stmt_list RBRACE  (42)
+	for_loop : FOR option_nl LP for_expr RP . option_nl LBRACE stmt_list RBRACE  (41)
 	option_nl : .  (3)
 
 	NL  shift 7
 	LBRACE  reduce 3
 
-	option_nl  goto 264
+	option_nl  goto 263
 
 
 state 245
-	for_expr : for_init SEMICOLON . boolean_list SEMICOLON for_update  (43)
+	for_expr : for_init SEMICOLON . boolean_list SEMICOLON for_update  (42)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -3270,7 +3153,7 @@ state 245
 	IDENTIFIER  shift 125
 	.  error
 
-	boolean_list  goto 265
+	boolean_list  goto 264
 	fcn_name  goto 54
 	math_stmt  goto 86
 	and_term  goto 127
@@ -3300,43 +3183,53 @@ state 245
 
 
 state 246
-	while_loop : WHILE option_nl LP boolean_list RP . option_nl LBRACE stmt_list RBRACE  (40)
+	while_loop : WHILE option_nl LP boolean_list RP . option_nl LBRACE stmt_list RBRACE  (39)
 	option_nl : .  (3)
 
 	NL  shift 7
 	LBRACE  reduce 3
 
-	option_nl  goto 266
+	option_nl  goto 265
 
 
 state 247
-	do_while_loop : DO option_nl LBRACE stmt_list RBRACE . option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (41)
+	do_while_loop : DO option_nl LBRACE stmt_list RBRACE . option_nl WHILE option_nl LP boolean_list RP SEMICOLON  (40)
 	option_nl : .  (3)
 
 	NL  shift 7
 	WHILE  reduce 3
 
-	option_nl  goto 267
+	option_nl  goto 266
 
 
 state 248
-	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list . RP option_nl LBRACE stmt_list RBRACE  (31)
+	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list . RP option_nl LBRACE stmt_list RBRACE  (30)
 
-	RP  shift 268
+	RP  shift 267
 	.  error
 
 
 state 249
-	param_list : var_type . IDENTIFIER  (33)
-	param_list : var_type . IDENTIFIER COMMA param_list  (34)
+	param_list : var_type . IDENTIFIER  (32)
+	param_list : var_type . IDENTIFIER COMMA param_list  (33)
 
-	IDENTIFIER  shift 269
+	IDENTIFIER  shift 268
 	.  error
 
 
 state 250
-	str_stmt : STRING CONCAT_OP str_stmt .  (101)
-	str_stmt_return : STRING CONCAT_OP str_stmt .  (104)
+	str_stmt : STRING CONCAT_OP str_stmt .  (100)
+	str_stmt_return : STRING CONCAT_OP str_stmt .  (103)
+
+	RP  reduce 103
+	SEMICOLON  reduce 103
+	STR_EQUALITY_OP  reduce 100
+	STR_NOT_EQUALITY_OP  reduce 100
+
+
+state 251
+	str_stmt : IDENTIFIER CONCAT_OP str_stmt .  (101)
+	str_stmt_return : IDENTIFIER CONCAT_OP str_stmt .  (104)
 
 	RP  reduce 104
 	SEMICOLON  reduce 104
@@ -3344,237 +3237,78 @@ state 250
 	STR_NOT_EQUALITY_OP  reduce 101
 
 
-state 251
-	str_stmt : IDENTIFIER CONCAT_OP str_stmt .  (102)
-	str_stmt_return : IDENTIFIER CONCAT_OP str_stmt .  (105)
-
-	RP  reduce 105
-	SEMICOLON  reduce 105
-	STR_EQUALITY_OP  reduce 102
-	STR_NOT_EQUALITY_OP  reduce 102
-
-
 state 252
-	send_item : INTEGER .  (152)
+	send_item : INTEGER .  (151)
+
+	.  reduce 151
+
+
+state 253
+	send_item : IDENTIFIER .  (152)
 
 	.  reduce 152
 
 
-state 253
-	send_item : IDENTIFIER .  (153)
-
-	.  reduce 153
-
-
 state 254
-	send : IDENTIFIER DOT SEND_PF LP send_item . RP  (147)
+	send : IDENTIFIER DOT SEND_PF LP send_item . RP  (146)
+
+	RP  shift 269
+	.  error
+
+
+state 255
+	read : IDENTIFIER DOT READ_PF LP RP .  (148)
+
+	.  reduce 148
+
+
+state 256
+	param_list_no_type : IDENTIFIER COMMA param_list_no_type .  (126)
+
+	.  reduce 126
+
+
+state 257
+	send : establish_connection DOT SEND_PF LP send_item . RP  (147)
 
 	RP  shift 270
 	.  error
 
 
-state 255
-	read : IDENTIFIER DOT READ_PF LP RP .  (149)
+state 258
+	read : establish_connection DOT READ_PF LP RP .  (149)
 
 	.  reduce 149
 
 
-state 256
-	param_list_no_type : IDENTIFIER COMMA param_list_no_type .  (127)
-
-	.  reduce 127
-
-
-state 257
-	send : establish_connection DOT SEND_PF LP send_item . RP  (148)
-
-	RP  shift 271
-	.  error
-
-
-state 258
-	read : establish_connection DOT READ_PF LP RP .  (150)
-
-	.  reduce 150
-
-
 state 259
-	boolean_no_math : LP NEGATION_OP boolean_expr RP .  (67)
+	boolean_no_math : LP NEGATION_OP boolean_expr RP .  (66)
 
-	.  reduce 67
+	.  reduce 66
 
 
 state 260
-	boolean_list : boolean_list OR_OP and_term .  (57)
-	and_term : and_term . AND_OP boolean_factor  (59)
-	boolean_no_math : LP boolean_list OR_OP and_term . RP  (64)
+	boolean_list : boolean_list OR_OP and_term .  (56)
+	and_term : and_term . AND_OP boolean_factor  (58)
+	boolean_no_math : LP boolean_list OR_OP and_term . RP  (63)
 
 	AND_OP  shift 191
-	RP  shift 272
-	OR_OP  reduce 57
+	RP  shift 271
+	OR_OP  reduce 56
 
 
 state 261
-	and_term : and_term AND_OP boolean_factor .  (59)
-	boolean_no_math : LP and_term AND_OP boolean_factor . RP  (65)
+	and_term : and_term AND_OP boolean_factor .  (58)
+	boolean_no_math : LP and_term AND_OP boolean_factor . RP  (64)
 
-	RP  shift 273
-	AND_OP  reduce 59
-	OR_OP  reduce 59
+	RP  shift 272
+	AND_OP  reduce 58
+	OR_OP  reduce 58
 
 
 state 262
-	unmatched : IF LP boolean_list RP option_nl stmt .  (12)
-
-	.  reduce 12
-
-
-state 263
-	stmt : matched .  (7)
-	matched : IF LP boolean_list RP option_nl matched . ELSE option_nl matched  (10)
-	unmatched : IF LP boolean_list RP option_nl matched . ELSE option_nl unmatched  (13)
-
-	ELSE  shift 274
-	error  reduce 7
-	IF  reduce 7
-	FOR  reduce 7
-	WHILE  reduce 7
-	DO  reduce 7
-	FUNCTION_DEF  reduce 7
-	RETURN  reduce 7
-	BOOLEAN_TYPE  reduce 7
-	INT_TYPE  reduce 7
-	STRING_TYPE  reduce 7
-	CHAR_TYPE  reduce 7
-	CONNECTION_TYPE  reduce 7
-	TIMESTAMP_TYPE  reduce 7
-	DOUBLE_TYPE  reduce 7
-	TIMESTAMP_PF  reduce 7
-	TEMPERATURE_PF  reduce 7
-	HUMIDITY_PF  reduce 7
-	AIR_PRESSURE_PF  reduce 7
-	AIR_QUALITY_PF  reduce 7
-	LIGHT_PF  reduce 7
-	SOUND_LEVEL_PF  reduce 7
-	NL  reduce 7
-	RBRACE  reduce 7
-	SINGLE_LINE_COMMENT  reduce 7
-	INCREMENT_OP  reduce 7
-	DECREMENT_OP  reduce 7
-	ESTABLISH_CONN_PF  reduce 7
-	IDENTIFIER  reduce 7
-
-
-state 264
-	for_loop : FOR option_nl LP for_expr RP option_nl . LBRACE stmt_list RBRACE  (42)
-
-	LBRACE  shift 275
-	.  error
-
-
-state 265
-	for_expr : for_init SEMICOLON boolean_list . SEMICOLON for_update  (43)
-	boolean_list : boolean_list . OR_OP and_term  (57)
-
-	OR_OP  shift 189
-	SEMICOLON  shift 276
-	.  error
-
-
-state 266
-	while_loop : WHILE option_nl LP boolean_list RP option_nl . LBRACE stmt_list RBRACE  (40)
-
-	LBRACE  shift 277
-	.  error
-
-
-state 267
-	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl . WHILE option_nl LP boolean_list RP SEMICOLON  (41)
-
-	WHILE  shift 278
-	.  error
-
-
-state 268
-	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP . option_nl LBRACE stmt_list RBRACE  (31)
-	option_nl : .  (3)
-
-	NL  shift 7
-	LBRACE  reduce 3
-
-	option_nl  goto 279
-
-
-state 269
-	param_list : var_type IDENTIFIER .  (33)
-	param_list : var_type IDENTIFIER . COMMA param_list  (34)
-
-	COMMA  shift 280
-	RP  reduce 33
-
-
-state 270
-	send : IDENTIFIER DOT SEND_PF LP send_item RP .  (147)
-
-	.  reduce 147
-
-
-state 271
-	send : establish_connection DOT SEND_PF LP send_item RP .  (148)
-
-	.  reduce 148
-
-
-state 272
-	boolean_no_math : LP boolean_list OR_OP and_term RP .  (64)
-
-	.  reduce 64
-
-
-state 273
-	boolean_no_math : LP and_term AND_OP boolean_factor RP .  (65)
-
-	.  reduce 65
-
-
-274: shift/reduce conflict (shift 7, reduce 3) on NL
-state 274
-	matched : IF LP boolean_list RP option_nl matched ELSE . option_nl matched  (10)
-	unmatched : IF LP boolean_list RP option_nl matched ELSE . option_nl unmatched  (13)
-	option_nl : .  (3)
-
-	NL  shift 7
-	IF  reduce 3
-	FOR  reduce 3
-	WHILE  reduce 3
-	DO  reduce 3
-	FUNCTION_DEF  reduce 3
-	RETURN  reduce 3
-	BOOLEAN_TYPE  reduce 3
-	INT_TYPE  reduce 3
-	STRING_TYPE  reduce 3
-	CHAR_TYPE  reduce 3
-	CONNECTION_TYPE  reduce 3
-	TIMESTAMP_TYPE  reduce 3
-	DOUBLE_TYPE  reduce 3
-	TIMESTAMP_PF  reduce 3
-	TEMPERATURE_PF  reduce 3
-	HUMIDITY_PF  reduce 3
-	AIR_PRESSURE_PF  reduce 3
-	AIR_QUALITY_PF  reduce 3
-	LIGHT_PF  reduce 3
-	SOUND_LEVEL_PF  reduce 3
-	SINGLE_LINE_COMMENT  reduce 3
-	INCREMENT_OP  reduce 3
-	DECREMENT_OP  reduce 3
-	ESTABLISH_CONN_PF  reduce 3
-	IDENTIFIER  reduce 3
-
-	option_nl  goto 281
-
-
-state 275
-	for_loop : FOR option_nl LP for_expr RP option_nl LBRACE . stmt_list RBRACE  (42)
+	if_stmt : IF LP boolean_list RP option_nl LBRACE . stmt_list RBRACE  (9)
+	if_else_stmt : IF LP boolean_list RP option_nl LBRACE . stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE  (10)
 
 	error  shift 11
 	IF  shift 12
@@ -3605,11 +3339,11 @@ state 275
 	IDENTIFIER  shift 37
 	.  error
 
-	stmt_list  goto 282
+	stmt_list  goto 273
 	stmt  goto 39
-	matched  goto 40
-	unmatched  goto 41
-	non_if_stmt  goto 42
+	conditional  goto 40
+	if_stmt  goto 41
+	if_else_stmt  goto 42
 	decrement_expr  goto 43
 	increment_expr  goto 44
 	declaration_expr  goto 45
@@ -3641,8 +3375,156 @@ state 275
 	establish_connection  goto 71
 
 
-state 276
-	for_expr : for_init SEMICOLON boolean_list SEMICOLON . for_update  (43)
+state 263
+	for_loop : FOR option_nl LP for_expr RP option_nl . LBRACE stmt_list RBRACE  (41)
+
+	LBRACE  shift 274
+	.  error
+
+
+state 264
+	for_expr : for_init SEMICOLON boolean_list . SEMICOLON for_update  (42)
+	boolean_list : boolean_list . OR_OP and_term  (56)
+
+	OR_OP  shift 189
+	SEMICOLON  shift 275
+	.  error
+
+
+state 265
+	while_loop : WHILE option_nl LP boolean_list RP option_nl . LBRACE stmt_list RBRACE  (39)
+
+	LBRACE  shift 276
+	.  error
+
+
+state 266
+	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl . WHILE option_nl LP boolean_list RP SEMICOLON  (40)
+
+	WHILE  shift 277
+	.  error
+
+
+state 267
+	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP . option_nl LBRACE stmt_list RBRACE  (30)
+	option_nl : .  (3)
+
+	NL  shift 7
+	LBRACE  reduce 3
+
+	option_nl  goto 278
+
+
+state 268
+	param_list : var_type IDENTIFIER .  (32)
+	param_list : var_type IDENTIFIER . COMMA param_list  (33)
+
+	COMMA  shift 279
+	RP  reduce 32
+
+
+state 269
+	send : IDENTIFIER DOT SEND_PF LP send_item RP .  (146)
+
+	.  reduce 146
+
+
+state 270
+	send : establish_connection DOT SEND_PF LP send_item RP .  (147)
+
+	.  reduce 147
+
+
+state 271
+	boolean_no_math : LP boolean_list OR_OP and_term RP .  (63)
+
+	.  reduce 63
+
+
+state 272
+	boolean_no_math : LP and_term AND_OP boolean_factor RP .  (64)
+
+	.  reduce 64
+
+
+state 273
+	if_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list . RBRACE  (9)
+	if_else_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list . RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE  (10)
+
+	RBRACE  shift 280
+	.  error
+
+
+state 274
+	for_loop : FOR option_nl LP for_expr RP option_nl LBRACE . stmt_list RBRACE  (41)
+
+	error  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	FUNCTION_DEF  shift 16
+	RETURN  shift 17
+	BOOLEAN_TYPE  shift 18
+	INT_TYPE  shift 19
+	STRING_TYPE  shift 20
+	CHAR_TYPE  shift 21
+	CONNECTION_TYPE  shift 22
+	TIMESTAMP_TYPE  shift 23
+	DOUBLE_TYPE  shift 24
+	TIMESTAMP_PF  shift 25
+	TEMPERATURE_PF  shift 26
+	HUMIDITY_PF  shift 27
+	AIR_PRESSURE_PF  shift 28
+	AIR_QUALITY_PF  shift 29
+	LIGHT_PF  shift 30
+	SOUND_LEVEL_PF  shift 31
+	NL  shift 32
+	SINGLE_LINE_COMMENT  shift 33
+	INCREMENT_OP  shift 34
+	DECREMENT_OP  shift 35
+	ESTABLISH_CONN_PF  shift 36
+	IDENTIFIER  shift 37
+	.  error
+
+	stmt_list  goto 281
+	stmt  goto 39
+	conditional  goto 40
+	if_stmt  goto 41
+	if_else_stmt  goto 42
+	decrement_expr  goto 43
+	increment_expr  goto 44
+	declaration_expr  goto 45
+	return_expr  goto 46
+	assignment_expr  goto 47
+	loop_expr  goto 48
+	define_fcn  goto 49
+	fcn_call_expr  goto 50
+	primitive_function_expr  goto 51
+	decrement_operation  goto 52
+	increment_operation  goto 53
+	fcn_name  goto 54
+	var_type  goto 55
+	while_loop  goto 56
+	do_while_loop  goto 57
+	for_loop  goto 58
+	assignment_expr_no_sc  goto 59
+	fcn_call  goto 60
+	primitive_functions  goto 61
+	get_timestamp  goto 62
+	get_temperature  goto 63
+	get_humidity  goto 64
+	get_air_pressure  goto 65
+	get_air_quality  goto 66
+	get_light  goto 67
+	get_sound_level  goto 68
+	send  goto 69
+	read  goto 70
+	establish_connection  goto 71
+
+
+state 275
+	for_expr : for_init SEMICOLON boolean_list SEMICOLON . for_update  (42)
 
 	TIMESTAMP_PF  shift 25
 	TEMPERATURE_PF  shift 26
@@ -3657,15 +3539,15 @@ state 276
 	ESTABLISH_CONN_PF  shift 36
 	INTEGER  shift 81
 	DOUBLE  shift 82
-	IDENTIFIER  shift 283
+	IDENTIFIER  shift 282
 	.  error
 
-	decrement_operation  goto 284
-	increment_operation  goto 285
+	decrement_operation  goto 283
+	increment_operation  goto 284
 	fcn_name  goto 54
-	for_update  goto 286
-	assignment_expr_no_sc  goto 287
-	math_stmt  goto 288
+	for_update  goto 285
+	assignment_expr_no_sc  goto 286
+	math_stmt  goto 287
 	term  goto 90
 	fcn_call  goto 91
 	primitive_functions  goto 92
@@ -3683,8 +3565,8 @@ state 276
 	establish_connection  goto 71
 
 
-state 277
-	while_loop : WHILE option_nl LP boolean_list RP option_nl LBRACE . stmt_list RBRACE  (40)
+state 276
+	while_loop : WHILE option_nl LP boolean_list RP option_nl LBRACE . stmt_list RBRACE  (39)
 
 	error  shift 11
 	IF  shift 12
@@ -3715,11 +3597,11 @@ state 277
 	IDENTIFIER  shift 37
 	.  error
 
-	stmt_list  goto 289
+	stmt_list  goto 288
 	stmt  goto 39
-	matched  goto 40
-	unmatched  goto 41
-	non_if_stmt  goto 42
+	conditional  goto 40
+	if_stmt  goto 41
+	if_else_stmt  goto 42
 	decrement_expr  goto 43
 	increment_expr  goto 44
 	declaration_expr  goto 45
@@ -3751,26 +3633,26 @@ state 277
 	establish_connection  goto 71
 
 
-state 278
-	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE . option_nl LP boolean_list RP SEMICOLON  (41)
+state 277
+	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE . option_nl LP boolean_list RP SEMICOLON  (40)
 	option_nl : .  (3)
 
 	NL  shift 7
 	LP  reduce 3
 
-	option_nl  goto 290
+	option_nl  goto 289
+
+
+state 278
+	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl . LBRACE stmt_list RBRACE  (30)
+
+	LBRACE  shift 290
+	.  error
 
 
 state 279
-	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl . LBRACE stmt_list RBRACE  (31)
-
-	LBRACE  shift 291
-	.  error
-
-
-state 280
-	param_list : var_type IDENTIFIER COMMA . param_list  (34)
-	param_list : .  (32)
+	param_list : var_type IDENTIFIER COMMA . param_list  (33)
+	param_list : .  (31)
 
 	BOOLEAN_TYPE  shift 18
 	INT_TYPE  shift 19
@@ -3779,158 +3661,131 @@ state 280
 	CONNECTION_TYPE  shift 22
 	TIMESTAMP_TYPE  shift 23
 	DOUBLE_TYPE  shift 24
-	RP  reduce 32
+	RP  reduce 31
 
-	param_list  goto 292
+	param_list  goto 291
 	var_type  goto 249
 
 
+280: shift/reduce conflict (shift 7, reduce 9) on NL
+state 280
+	if_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE .  (9)
+	if_else_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE . option_nl ELSE option_nl LBRACE stmt_list RBRACE  (10)
+	option_nl : .  (3)
+
+	NL  shift 7
+	error  reduce 9
+	IF  reduce 9
+	FOR  reduce 9
+	WHILE  reduce 9
+	DO  reduce 9
+	ELSE  reduce 3
+	FUNCTION_DEF  reduce 9
+	RETURN  reduce 9
+	BOOLEAN_TYPE  reduce 9
+	INT_TYPE  reduce 9
+	STRING_TYPE  reduce 9
+	CHAR_TYPE  reduce 9
+	CONNECTION_TYPE  reduce 9
+	TIMESTAMP_TYPE  reduce 9
+	DOUBLE_TYPE  reduce 9
+	TIMESTAMP_PF  reduce 9
+	TEMPERATURE_PF  reduce 9
+	HUMIDITY_PF  reduce 9
+	AIR_PRESSURE_PF  reduce 9
+	AIR_QUALITY_PF  reduce 9
+	LIGHT_PF  reduce 9
+	SOUND_LEVEL_PF  reduce 9
+	RBRACE  reduce 9
+	SINGLE_LINE_COMMENT  reduce 9
+	INCREMENT_OP  reduce 9
+	DECREMENT_OP  reduce 9
+	ESTABLISH_CONN_PF  reduce 9
+	IDENTIFIER  reduce 9
+
+	option_nl  goto 292
+
+
 state 281
-	matched : IF LP boolean_list RP option_nl matched ELSE option_nl . matched  (10)
-	unmatched : IF LP boolean_list RP option_nl matched ELSE option_nl . unmatched  (13)
+	for_loop : FOR option_nl LP for_expr RP option_nl LBRACE stmt_list . RBRACE  (41)
 
-	IF  shift 12
-	FOR  shift 13
-	WHILE  shift 14
-	DO  shift 15
-	FUNCTION_DEF  shift 16
-	RETURN  shift 17
-	BOOLEAN_TYPE  shift 18
-	INT_TYPE  shift 19
-	STRING_TYPE  shift 20
-	CHAR_TYPE  shift 21
-	CONNECTION_TYPE  shift 22
-	TIMESTAMP_TYPE  shift 23
-	DOUBLE_TYPE  shift 24
-	TIMESTAMP_PF  shift 25
-	TEMPERATURE_PF  shift 26
-	HUMIDITY_PF  shift 27
-	AIR_PRESSURE_PF  shift 28
-	AIR_QUALITY_PF  shift 29
-	LIGHT_PF  shift 30
-	SOUND_LEVEL_PF  shift 31
-	NL  shift 32
-	SINGLE_LINE_COMMENT  shift 33
-	INCREMENT_OP  shift 34
-	DECREMENT_OP  shift 35
-	ESTABLISH_CONN_PF  shift 36
-	IDENTIFIER  shift 37
+	RBRACE  shift 293
 	.  error
-
-	matched  goto 293
-	unmatched  goto 294
-	non_if_stmt  goto 42
-	decrement_expr  goto 43
-	increment_expr  goto 44
-	declaration_expr  goto 45
-	return_expr  goto 46
-	assignment_expr  goto 47
-	loop_expr  goto 48
-	define_fcn  goto 49
-	fcn_call_expr  goto 50
-	primitive_function_expr  goto 51
-	decrement_operation  goto 52
-	increment_operation  goto 53
-	fcn_name  goto 54
-	var_type  goto 55
-	while_loop  goto 56
-	do_while_loop  goto 57
-	for_loop  goto 58
-	assignment_expr_no_sc  goto 59
-	fcn_call  goto 60
-	primitive_functions  goto 61
-	get_timestamp  goto 62
-	get_temperature  goto 63
-	get_humidity  goto 64
-	get_air_pressure  goto 65
-	get_air_quality  goto 66
-	get_light  goto 67
-	get_sound_level  goto 68
-	send  goto 69
-	read  goto 70
-	establish_connection  goto 71
 
 
 state 282
-	for_loop : FOR option_nl LP for_expr RP option_nl LBRACE stmt_list . RBRACE  (42)
-
-	RBRACE  shift 295
-	.  error
-
-
-state 283
-	decrement_operation : IDENTIFIER . DECREMENT_OP  (26)
-	increment_operation : IDENTIFIER . INCREMENT_OP  (29)
-	assignment_expr_no_sc : IDENTIFIER . ASSIGN_OP assignment_operand  (53)
-	factor : IDENTIFIER .  (121)
-	fcn_name : IDENTIFIER .  (128)
-	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (147)
-	read : IDENTIFIER . DOT READ_PF LP RP  (149)
+	decrement_operation : IDENTIFIER . DECREMENT_OP  (25)
+	increment_operation : IDENTIFIER . INCREMENT_OP  (28)
+	assignment_expr_no_sc : IDENTIFIER . ASSIGN_OP assignment_operand  (52)
+	factor : IDENTIFIER .  (120)
+	fcn_name : IDENTIFIER .  (127)
+	send : IDENTIFIER . DOT SEND_PF LP send_item RP  (146)
+	read : IDENTIFIER . DOT READ_PF LP RP  (148)
 
 	INCREMENT_OP  shift 105
 	DECREMENT_OP  shift 106
 	ASSIGN_OP  shift 107
 	DOT  shift 108
-	LP  reduce 128
-	RP  reduce 121
-	PLUS_OP  reduce 121
-	MINUS_OP  reduce 121
-	DIV_OP  reduce 121
-	MULT_OP  reduce 121
-	POWER_OP  reduce 121
-	MODULO_OP  reduce 121
+	LP  reduce 127
+	RP  reduce 120
+	PLUS_OP  reduce 120
+	MINUS_OP  reduce 120
+	DIV_OP  reduce 120
+	MULT_OP  reduce 120
+	POWER_OP  reduce 120
+	MODULO_OP  reduce 120
+
+
+state 283
+	for_update : decrement_operation .  (47)
+
+	.  reduce 47
 
 
 state 284
-	for_update : decrement_operation .  (48)
+	for_update : increment_operation .  (48)
 
 	.  reduce 48
 
 
 state 285
-	for_update : increment_operation .  (49)
+	for_expr : for_init SEMICOLON boolean_list SEMICOLON for_update .  (42)
 
-	.  reduce 49
+	.  reduce 42
 
 
 state 286
-	for_expr : for_init SEMICOLON boolean_list SEMICOLON for_update .  (43)
+	for_update : assignment_expr_no_sc .  (46)
 
-	.  reduce 43
+	.  reduce 46
 
 
 state 287
-	for_update : assignment_expr_no_sc .  (47)
-
-	.  reduce 47
-
-
-state 288
-	for_update : math_stmt .  (46)
-	math_stmt : math_stmt . PLUS_OP term  (108)
-	math_stmt : math_stmt . MINUS_OP term  (109)
+	for_update : math_stmt .  (45)
+	math_stmt : math_stmt . PLUS_OP term  (107)
+	math_stmt : math_stmt . MINUS_OP term  (108)
 
 	PLUS_OP  shift 145
 	MINUS_OP  shift 146
-	RP  reduce 46
+	RP  reduce 45
+
+
+state 288
+	while_loop : WHILE option_nl LP boolean_list RP option_nl LBRACE stmt_list . RBRACE  (39)
+
+	RBRACE  shift 294
+	.  error
 
 
 state 289
-	while_loop : WHILE option_nl LP boolean_list RP option_nl LBRACE stmt_list . RBRACE  (40)
+	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl . LP boolean_list RP SEMICOLON  (40)
 
-	RBRACE  shift 296
+	LP  shift 295
 	.  error
 
 
 state 290
-	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl . LP boolean_list RP SEMICOLON  (41)
-
-	LP  shift 297
-	.  error
-
-
-state 291
-	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE . stmt_list RBRACE  (31)
+	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE . stmt_list RBRACE  (30)
 
 	error  shift 11
 	IF  shift 12
@@ -3961,11 +3816,11 @@ state 291
 	IDENTIFIER  shift 37
 	.  error
 
-	stmt_list  goto 298
+	stmt_list  goto 296
 	stmt  goto 39
-	matched  goto 40
-	unmatched  goto 41
-	non_if_stmt  goto 42
+	conditional  goto 40
+	if_stmt  goto 41
+	if_else_stmt  goto 42
 	decrement_expr  goto 43
 	increment_expr  goto 44
 	declaration_expr  goto 45
@@ -3997,38 +3852,33 @@ state 291
 	establish_connection  goto 71
 
 
-state 292
-	param_list : var_type IDENTIFIER COMMA param_list .  (34)
+state 291
+	param_list : var_type IDENTIFIER COMMA param_list .  (33)
 
-	.  reduce 34
+	.  reduce 33
+
+
+state 292
+	if_else_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl . ELSE option_nl LBRACE stmt_list RBRACE  (10)
+
+	ELSE  shift 297
+	.  error
 
 
 state 293
-	matched : IF LP boolean_list RP option_nl matched ELSE option_nl matched .  (10)
+	for_loop : FOR option_nl LP for_expr RP option_nl LBRACE stmt_list RBRACE .  (41)
 
-	.  reduce 10
+	.  reduce 41
 
 
 state 294
-	unmatched : IF LP boolean_list RP option_nl matched ELSE option_nl unmatched .  (13)
+	while_loop : WHILE option_nl LP boolean_list RP option_nl LBRACE stmt_list RBRACE .  (39)
 
-	.  reduce 13
+	.  reduce 39
 
 
 state 295
-	for_loop : FOR option_nl LP for_expr RP option_nl LBRACE stmt_list RBRACE .  (42)
-
-	.  reduce 42
-
-
-state 296
-	while_loop : WHILE option_nl LP boolean_list RP option_nl LBRACE stmt_list RBRACE .  (40)
-
-	.  reduce 40
-
-
-state 297
-	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP . boolean_list RP SEMICOLON  (41)
+	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP . boolean_list RP SEMICOLON  (40)
 
 	TRUE_LITERAL  shift 120
 	FALSE_LITERAL  shift 121
@@ -4049,7 +3899,7 @@ state 297
 	IDENTIFIER  shift 125
 	.  error
 
-	boolean_list  goto 299
+	boolean_list  goto 298
 	fcn_name  goto 54
 	math_stmt  goto 86
 	and_term  goto 127
@@ -4078,45 +3928,141 @@ state 297
 	establish_connection  goto 71
 
 
-state 298
-	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list . RBRACE  (31)
+state 296
+	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list . RBRACE  (30)
 
-	RBRACE  shift 300
+	RBRACE  shift 299
 	.  error
 
 
-state 299
-	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list . RP SEMICOLON  (41)
-	boolean_list : boolean_list . OR_OP and_term  (57)
+state 297
+	if_else_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE . option_nl LBRACE stmt_list RBRACE  (10)
+	option_nl : .  (3)
+
+	NL  shift 7
+	LBRACE  reduce 3
+
+	option_nl  goto 300
+
+
+state 298
+	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list . RP SEMICOLON  (40)
+	boolean_list : boolean_list . OR_OP and_term  (56)
 
 	OR_OP  shift 189
 	RP  shift 301
 	.  error
 
 
-state 300
-	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list RBRACE .  (31)
+state 299
+	define_fcn : FUNCTION_DEF fcn_return_type fcn_name LP param_list RP option_nl LBRACE stmt_list RBRACE .  (30)
 
-	.  reduce 31
+	.  reduce 30
+
+
+state 300
+	if_else_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl . LBRACE stmt_list RBRACE  (10)
+
+	LBRACE  shift 302
+	.  error
 
 
 state 301
-	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP . SEMICOLON  (41)
+	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP . SEMICOLON  (40)
 
-	SEMICOLON  shift 302
+	SEMICOLON  shift 303
 	.  error
 
 
 state 302
-	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON .  (41)
+	if_else_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE . stmt_list RBRACE  (10)
 
-	.  reduce 41
+	error  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	FUNCTION_DEF  shift 16
+	RETURN  shift 17
+	BOOLEAN_TYPE  shift 18
+	INT_TYPE  shift 19
+	STRING_TYPE  shift 20
+	CHAR_TYPE  shift 21
+	CONNECTION_TYPE  shift 22
+	TIMESTAMP_TYPE  shift 23
+	DOUBLE_TYPE  shift 24
+	TIMESTAMP_PF  shift 25
+	TEMPERATURE_PF  shift 26
+	HUMIDITY_PF  shift 27
+	AIR_PRESSURE_PF  shift 28
+	AIR_QUALITY_PF  shift 29
+	LIGHT_PF  shift 30
+	SOUND_LEVEL_PF  shift 31
+	NL  shift 32
+	SINGLE_LINE_COMMENT  shift 33
+	INCREMENT_OP  shift 34
+	DECREMENT_OP  shift 35
+	ESTABLISH_CONN_PF  shift 36
+	IDENTIFIER  shift 37
+	.  error
+
+	stmt_list  goto 304
+	stmt  goto 39
+	conditional  goto 40
+	if_stmt  goto 41
+	if_else_stmt  goto 42
+	decrement_expr  goto 43
+	increment_expr  goto 44
+	declaration_expr  goto 45
+	return_expr  goto 46
+	assignment_expr  goto 47
+	loop_expr  goto 48
+	define_fcn  goto 49
+	fcn_call_expr  goto 50
+	primitive_function_expr  goto 51
+	decrement_operation  goto 52
+	increment_operation  goto 53
+	fcn_name  goto 54
+	var_type  goto 55
+	while_loop  goto 56
+	do_while_loop  goto 57
+	for_loop  goto 58
+	assignment_expr_no_sc  goto 59
+	fcn_call  goto 60
+	primitive_functions  goto 61
+	get_timestamp  goto 62
+	get_temperature  goto 63
+	get_humidity  goto 64
+	get_air_pressure  goto 65
+	get_air_quality  goto 66
+	get_light  goto 67
+	get_sound_level  goto 68
+	send  goto 69
+	read  goto 70
+	establish_connection  goto 71
 
 
-State 7 contains 1 shift/reduce conflict.
-State 190 contains 1 shift/reduce conflict.
-State 274 contains 1 shift/reduce conflict.
+state 303
+	do_while_loop : DO option_nl LBRACE stmt_list RBRACE option_nl WHILE option_nl LP boolean_list RP SEMICOLON .  (40)
+
+	.  reduce 40
+
+
+state 304
+	if_else_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list . RBRACE  (10)
+
+	RBRACE  shift 305
+	.  error
+
+
+state 305
+	if_else_stmt : IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE .  (10)
+
+	.  reduce 10
+
+
+State 280 contains 1 shift/reduce conflict.
 
 
 70 terminals, 64 nonterminals
-156 grammar rules, 303 states
+155 grammar rules, 306 states

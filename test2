@@ -157,6 +157,23 @@ main()
     
     boolean ofamk = bool && true || !(!false || !agalama); // hi there
 
+    /*amoamogus*/
+
+    /*
+    amoa
+    mogus
+    */
+
+    /*
+    function void uyku 
+
+    function string uykuint agala, string kudur, connection cildir*/
+    /*
+    amoa
+    mogus
+    */
+
+    /*
     function void uyku() {
         boolean aBool = (112 * 8 / 3) == 8;
         boolean aBool = (112 * 8 / 3) >= 8;
@@ -166,6 +183,7 @@ main()
         boolean aBool = (112 * 8 / 3) == 8;
         boolean aBool = (112 * 8 / 3) >= 8;
     }
+    */
 
     function string uyku(int agala) 
     
@@ -192,24 +210,36 @@ main()
 
     establish_connection.send(iAmAnItem);
     aVar.read();
-    aVar.read(amo);
+    //aVar.read(amo);
+  
+    if (amo && gus) {
+        boolean bool = amogus;
 
-    if (amgus) {
-
-        aVar.read();
-
-    }
+        if (amo && gus) {
+            boolean bool = amogus;
+            if (amo && gus) {
+                boolean bool = amogus;
+            };
+        }
+        else {
+            int sus = i;
+        };
+    };
 
     if (amo && gus) {
-        boolean = amogus;
+        boolean bool = amogus;
+        if (amo && gus) {
+            boolean bool = amogus;
+        };
     }
-
     else {
-        int i++;
-    }
+        int sus = i;
+
+        if (amo && gus) {
+            boolean bool = amogus;
+        };
+    };
 }
 
 
-
-
-
+//          /\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*/

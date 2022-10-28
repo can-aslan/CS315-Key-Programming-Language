@@ -1,7 +1,4 @@
-main() {
-    /*
-        a sample program
-    */
+ main() {
 
     //variables
     int limit = 99;
@@ -13,7 +10,7 @@ main() {
     }
 
     //connection
-    string url = "http://www.cs.bilkent.edu.tr/~guvenir/courses/CS315/Pr1.htm"
+    string url = "http://www.cs.bilkent.edu.tr/~guvenir/courses/CS315/Pr1.htm";
     connection conn1 = establishConnection(url);
 
     conn1.send(limit);
@@ -26,11 +23,11 @@ main() {
 
     //switches and for loop
     for (int switchNo = 0; switchNo < 10; ++switchNo ) {
-        switch[switchNo] = true;
+        //switch[switchNo] = true;
     }
 
-    switch[0] = switch[9];
-    switch[1] = !switch[8];
+    //switch[0] = switch[9];
+    //switch[1] = !switch[8];
 
     //sensor
     timestamp currentTime = getTimestamp();
@@ -55,12 +52,14 @@ main() {
         limit--;
     }
 
-    int additionResult = addNumber(limit, -21) * 9;
+    int additionResult = addNumber(limit, 21 + 48, 28 ** 2) * 9;
+    int additionResult = addNumber();
+    int additionResult = addNumber(abo);
 
     string resultString = concat("key ", "language");
     doNothing();
 
-    double myVar 25;
+    //double myVar 25;
     int temp;
     temp = 0;
     boolean isOK = false;
@@ -70,6 +69,6 @@ main() {
 
         if (temp == 20) {
             isOK = true;
-        }
+        };
     }
 }

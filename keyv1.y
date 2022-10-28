@@ -36,58 +36,20 @@ stmt_list: stmt
            | stmt stmt_list
            ;
 
-stmt: matched
-      | unmatched
-      | error NL {
-                     printf(" in line %d!\n", lineno);
-                     yyerrok;
-                 }
-      ;
 
-      /*
-      {if (false) {
-        stmt
-      }}
+conditional: if_stmt |
+             if_else_stmt;
 
-      {
-        int i = 5;
-      }
-      */
+if_stmt: IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE SEMICOLON;
 
-
-matched: IF LP boolean_list RP matched ELSE matched 
-         | non_if_stmt
-         | LBRACE matched RBRACE
-         ;
-
-unmatched: IF LP boolean_list RP stmt_list
-           | IF LP boolean_list RP matched ELSE unmatched
-           | LBRACE unmatched RBRACE
-           ;
-
-non_if_stmt: decrement_expr
-             | increment_expr
-             | SINGLE_LINE_COMMENT
-             | declaration_expr
-             | return_expr
-             | assignment_expr
-             | loop_expr
-             | define_fcn
-             | fcn_call_expr
-             | primitive_function_expr
-             | NL
-             ;
+if_else_stmt: IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE SEMICOLON;
 
 
 
-
-
-
-
-/////////////////////////////////////
-/*stmt: decrement_expr
+stmt: decrement_expr
       | increment_expr
       | SINGLE_LINE_COMMENT
+      | MULT_LINE_COMMENT
       | declaration_expr
       | return_expr
       | assignment_expr
@@ -95,12 +57,13 @@ non_if_stmt: decrement_expr
       | define_fcn
       | fcn_call_expr
       | primitive_function_expr
+      | conditional
       | NL
       | error NL {
                      printf(" in line %d!\n", lineno);
                      yyerrok;
                  }
-      ;*/
+      ;
       
 decrement_expr: decrement_operation SEMICOLON;
 decrement_operation: IDENTIFIER DECREMENT_OP;
@@ -262,10 +225,13 @@ factor: INTEGER
         ;
 
 param_list_no_type: /* empty */   
-                    | IDENTIFIER
-                    | IDENTIFIER COMMA param_list_no_type
+                    | param_list_no_type_item
+                    | param_list_no_type_item COMMA param_list_no_type
                     ;
 
+param_list_no_type_item: num_comparable
+                         | str_stmt_return
+                         ;
 
 fcn_name: IDENTIFIER;
 
