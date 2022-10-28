@@ -1,0 +1,93 @@
+
+
+
+main()
+
+ {
+    //variables
+    int limit = 99;
+    double frequency = 0;
+
+    //for loop
+    for (int i = 0; i < limit; ++i ) {
+        frequency = frequency + 0.5;
+    }
+
+    if (temp == 20) {
+        isOK = true;
+    };
+    
+    int i = 0;
+
+    //connection
+    string url = "http://www.cs.bilkent.edu.tr/~guvenir/courses/CS315/Pr1.htm";
+    connection conn1 = establishConnection(url);
+
+    conn1.send(limit);
+    conn1.send(12);
+
+    conn1.read();
+    conn1.read("asdf"); // read cannot have a parameter
+
+    boolean isEqual = "abc" === "abC";
+    boolean isEqual = "abc" == "abC"; // strings cannot be compared with "=="
+
+    establishConnection("https://quest-yard.herokuapp.com/").send(5);
+    establishConnection("https://quest-yard.herokuapp.com/").read();
+
+    //switches and for loop
+    for (int switchNo = 0; switchNo < 10; ++switchNo ) {
+        switchNo++;
+    }
+
+    //sensor
+    timestamp currentTime = getTimestamp();
+    double currentTemp = getTemperature();
+    double current_humidity = getHumidity();
+    double air$pressure = getAirPressure(12); //getAirPressure primitive function cannot have a parameter
+    double currentAirQuality = getAirQuality();
+    double currentLight = getLight();
+    double currentSound = getSoundLevel(2.5);
+    double currentSound = getSoundLevel(frequency);
+
+    //function
+    function string concat(string s1, string s2) {
+        return s1 & s2;
+    }
+
+    function int addNumber(int num1, int num2) {
+        return num1 + num1;
+    }
+
+    function void doNothing() {
+        limit--;
+    }
+
+    int additionResult = addNumber(limit, 21 + 48, 28 ** 2) * 9;
+    int additionResult = addNumber();
+    int additionResult = addNumber(abo);
+
+    string resultString = concat("key ", "language");
+    doNothing();
+
+    //double myVar 25;
+    int temp;
+    temp = 0;
+    boolea isOK = false;
+
+    while (temp <= myVar && !isOK) {
+        temp = temp * 5;
+
+        if (temp == 20) {
+            isOK = true;
+        };
+    }
+
+    /* myVar type should be double
+        boolean is a typ
+    */
+    dubul myVar != myInt + boolean -- "mathematical expression";
+
+    int adana = 5;
+}
+
