@@ -84,7 +84,8 @@ main()
     }
 
     /* myVar type should be double
-        boolean is a typ
+        boolean is a type therefore it cannot be used as an assignment operand
+        
     */
     dubul myVar != myInt + boolean -- "mathematical expression";
 

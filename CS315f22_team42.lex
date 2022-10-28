@@ -8,7 +8,10 @@ char_stmt \'{all_chars}\'
 integer {digit}+
 double_num {digit}*(\.){digit}+
 %%
-main    return (MAIN);
+main    {
+            extern int isValid;
+            return (MAIN);
+        }
 if    return (IF);
 for    return (FOR);
 while    return (WHILE);
@@ -16,7 +19,7 @@ do    return (DO);
 else    return (ELSE);
 function    return (FUNCTION_DEF);
 return    return (RETURN);
-\/\*([^(\/\*)]|\(|\)|\*+[^(\*\/)])*([\*])+\/    return (MULT_LINE_COMMENT);
+\/\*([^(\/\*)]|\(|\)|\/|\*+[^(\*\/)])*([\*])+\/    return (MULT_LINE_COMMENT);
 \!    return (NEGATION_OP);
 \&\&    return (AND_OP);
 \|\|    return (OR_OP);

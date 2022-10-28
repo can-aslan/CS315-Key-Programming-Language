@@ -22,29 +22,32 @@
 %token <character> CHAR
 %token <string> IDENTIFIER
 %%
-program: MAIN LP RP option_nl LBRACE stmt_list RBRACE option_nl
+// Since YACC tool selects the first rule as the start (root) if not specified,
+// the rule below ("program") is the beginning of the execution
+program: option_nl MAIN LP RP option_nl LBRACE stmt_list RBRACE option_nl 
+// { printf("Input is valid!\n"); }
          | error NL {
-                        printf(" in line %d!\n", lineno);
-                        yyerrok;
-                    }
+              printf("syntax error on line %d!\n", lineno);
+              isValid = 1;
+              yyerrok;
+           }
          ;
 
 option_nl: /*empty*/
-           | NL option_nl;
-
-stmt_list: stmt
-           | stmt stmt_list
+           | option_nl NL
            ;
 
+stmt_list: stmt
+           | stmt_list stmt
+           ;
 
-conditional: if_stmt |
-             if_else_stmt;
+conditional: if_stmt
+             | if_else_stmt
+             ;
 
 if_stmt: IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE SEMICOLON;
 
 if_else_stmt: IF LP boolean_list RP option_nl LBRACE stmt_list RBRACE option_nl ELSE option_nl LBRACE stmt_list RBRACE SEMICOLON;
-
-
 
 stmt: decrement_expr
       | increment_expr
@@ -60,9 +63,10 @@ stmt: decrement_expr
       | conditional
       | NL
       | error NL {
-                     printf(" in line %d!\n", lineno);
-                     yyerrok;
-                 }
+              printf("syntax error on line %d!\n", lineno);
+              isValid = 1;
+              yyerrok;
+           }
       ;
       
 decrement_expr: decrement_operation SEMICOLON;
@@ -153,25 +157,25 @@ num_compr_expr: num_comparable comparator_operator num_comparable;
 string_compr_expr: str_stmt equal_or_not_operator str_stmt;
 
 comparator_operator: GREATER_OP
-                    | LESS_OP
-                    | GREAT_OR_EQUAL_OP
-                    | LESS_OR_EQUAL_OP
-                    | EQUALITY_OP
-                    | NOT_EQUALITY_OP
-                    ;
+                     | LESS_OP
+                     | GREAT_OR_EQUAL_OP
+                     | LESS_OR_EQUAL_OP
+                     | EQUALITY_OP
+                     | NOT_EQUALITY_OP
+                     ;
 
-equal_or_not_operator : STR_EQUALITY_OP
-                        | STR_NOT_EQUALITY_OP
-                        ;
+equal_or_not_operator: STR_EQUALITY_OP
+                       | STR_NOT_EQUALITY_OP
+                       ;
 
-var_type:   INT_TYPE
-            | CHAR_TYPE
-            | STRING_TYPE
-            | CONNECTION_TYPE
-            | BOOLEAN_TYPE
-            | TIMESTAMP_TYPE
-            | DOUBLE_TYPE
-            ;
+var_type: INT_TYPE
+          | CHAR_TYPE
+          | STRING_TYPE
+          | CONNECTION_TYPE
+          | BOOLEAN_TYPE
+          | TIMESTAMP_TYPE
+          | DOUBLE_TYPE
+          ;
 
 boolean_literal: TRUE_LITERAL | FALSE_LITERAL;
 
@@ -274,9 +278,14 @@ frequency: IDENTIFIER
 %%
 #include "lex.yy.c"
 int lineno = 0;
-int yyerror(char *s) {
-    printf("%s is poo poo", s);
-}
+int isValid = 0;
+int yyerror(char *s) {}
 int main(void) {
-    return yyparse();
+    int result = yyparse();
+
+    if (isValid == 0) {
+        printf("Input is valid!\n");
+    }
+
+    return result;
 }

@@ -7,7 +7,11 @@ main() {
 
     if ( s1 && s2 ) {
         // If s1 and s2 actuators are on make s4 actuator off.
-        //switch[3] = false;
+        for ( int i = 0; i < getTemperature(); i++){
+            if ( aBool && (bool2 || bool3)){
+                aConnection.send( aFrequency );
+            };
+        }
     };
 
     // Calculate the warmth felt
@@ -15,18 +19,17 @@ main() {
 
     if ( wf <= 25 ) {
         if ( wf < 25 ) {
-            //switch[4] = 1;
-            //switch[5] = 0;
+            
         }
         else {
-            //switch[4] = 0;
+            string aStr = "aURL";
+            aStr = aStr & "postfix";
             //switch[5] = 0;
         };
     }
     else {
-        if ( wf > 25 ) {
-            //switch[4] = 0;
-            //switch[5] = 1;
+        if ( aString === "apple" ) {
+            return getAirPressure();
         };
     };
 

@@ -1,5 +1,7 @@
 main() {
-    /* A sample program that does some mathematical operations */
+    /* 
+        A sample program that does some mathematical and string operations 
+    */
     
     int a = 10;
     int b = 15;
@@ -18,6 +20,9 @@ main() {
     int $div_result = _var1 / _var0;
     int $modulo_result = _var1 % _var0;
 
+    string mystring = "hiThere" & myString2;
+    boolean areEqual = mystring === myString2;
+
     /*
         Demonstration of a multi-line comment
 
@@ -26,31 +31,28 @@ main() {
 
         if ( s1 && s2 ){
             // If s1 and s2 actuators are on make s4 actuator off.
-            switch[3] = false;
-        }
+            boolean s1 = = false;
+        };
 
         // Calculate the warmth felt
         int wf = getTemperature()**getHumidity() / getAirpressure(); // Not depend on real calculations
 
         if ( wf <= 25 ) {
             if ( wf < 25 ){
-                switch[4] = 1;
-                switch[5] = 0;
+                char myChar = 'b';
             }
             else {
-                switch[4] = 0;
-                switch[5] = 0;
-            }
+                myVar = 5 + 4;
+            };
         }
         else {
             if ( wf > 25 ){
-                switch[4] = 0;
-                switch[5] = 1;
-            }
+                wf--;
+            };
         }
 
-        if ( switch[7] ){
+        if ( true || false && isConnected ){
             double calcLvl =  (7 / 24 * 5) % 11 - 1;
-        }
+        };
     */
 }
